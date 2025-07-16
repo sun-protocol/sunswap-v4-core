@@ -163,7 +163,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         address settler,
         BalanceDelta hookDelta,
         address hook
-    ) internal override {
+    ) internal {
         (int128 delta0, int128 delta1) = (delta.amount0(), delta.amount1());
         (int128 hookDelta0, int128 hookDelta1) = (hookDelta.amount0(), hookDelta.amount1());
 
@@ -181,7 +181,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
 
     /// @inheritdoc IVault
     function accountAppBalanceDelta(Currency currency0, Currency currency1, BalanceDelta delta, address settler)
-    internal override {
+    internal {
         int128 delta0 = delta.amount0();
         int128 delta1 = delta.amount1();
 
@@ -197,7 +197,6 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
     /// @inheritdoc IVault
     function accountAppBalanceDelta(Currency currency, int128 delta, address settler)
         internal
-        override
         isLocked
         
     {

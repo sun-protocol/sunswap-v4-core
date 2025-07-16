@@ -48,40 +48,6 @@ interface IVault is IVaultToken {
     /// @return The data returned by the call to `ILockCallback(msg.sender).lockCallback(data)`
     function lock(bytes calldata data) external returns (bytes memory);
 
-    /// @notice Called by registered app to account for a change in the pool balance,
-    /// convenient for AMM pool manager, typically after modifyLiquidity, swap, donate,
-    /// include the case where hookDelta is involved
-    /// @param currency0 The PoolKey currency0 to update
-    /// @param currency1 The PoolKey currency1 to update
-    /// @param delta The change in the pool's balance
-    /// @param settler The address whose delta will be updated
-    /// @param hookDelta The change in the pool's balance from hook
-    /// @param hook The address whose hookDelta will be updated
-    function accountAppBalanceDelta(
-        Currency currency0,
-        Currency currency1,
-        BalanceDelta delta,
-        address settler,
-        BalanceDelta hookDelta,
-        address hook
-    ) internal;
-
-    /// @notice Called by registered app to account for a change in the pool balance,
-    /// convenient for AMM pool manager, typically after modifyLiquidity, swap, donate
-    /// @param currency0 The PoolKey currency0 to update
-    /// @param currency1 The PoolKey currency1 to update
-    /// @param delta The change in the pool's balance
-    /// @param settler The address whose delta will be updated
-    function accountAppBalanceDelta(Currency currency0, Currency currency1, BalanceDelta delta, address settler)
-        internal;
-
-    /// @notice This works as a general accounting mechanism for non-dex app
-    /// @param currency The currency to update
-    /// @param delta The change in the balance
-    /// @param settler The address whose delta will be updated
-    function accountAppBalanceDelta(Currency currency, int128 delta, address settler) 
-        internal;
-
     /// @notice Called by the user to net out some value owed to the user
     /// @dev Will revert if the requested amount is not available, consider using `mint` instead
     /// @dev Can also be used as a mechanism for free flash loans
