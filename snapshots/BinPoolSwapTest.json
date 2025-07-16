@@ -1,0 +1,9 @@
+{
+  "testGas_exactOutputMultipleBin_WithEmptyBins": "155935",
+  "test_exactInputMultipleBin": "288862",
+  "test_exactInputSingleBin_SwapForX": "51646",
+  "test_exactInputSingleBin_SwapForY": "51418",
+  "test_exactOutputMultipleBin": "285525",
+  "test_exactOutputSingleBin_SwapForX": "47697",
+  "test_exactOutputSingleBin_SwapForY": "48081"
+}

@@ -2,10 +2,10 @@
 // Copyright (C) 2024 PancakeSwap
 pragma solidity ^0.8.0;
 
-import {SafeCast} from "../../libraries/SafeCast.sol";
+import {SafeCast} from "../libraries/SafeCast.sol";
 
 import {FullMath} from "./FullMath.sol";
-import {UnsafeMath} from "../../libraries/math/UnsafeMath.sol";
+import {UnsafeMath} from "../libraries/math/UnsafeMath.sol";
 import {FixedPoint96} from "./FixedPoint96.sol";
 
 /// @title Functions based on Q64.96 sqrt price and liquidity

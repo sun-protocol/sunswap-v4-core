@@ -1,11 +1,11 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {PoolKey} from "../../types/PoolKey.sol";
-import {BalanceDelta} from "../../types/BalanceDelta.sol";
+import {PoolKey} from "../types/PoolKey.sol";
+import {BalanceDelta} from "../types/BalanceDelta.sol";
 import {ICLPoolManager} from "./ICLPoolManager.sol";
-import {IHooks} from "../../interfaces/IHooks.sol";
-import {BeforeSwapDelta} from "../../types/BeforeSwapDelta.sol";
+import {IHooks} from "../interfaces/IHooks.sol";
+import {BeforeSwapDelta} from "../types/BeforeSwapDelta.sol";
 
 /// @dev Update PoolManager#_validateHookNoOp if theres a new offset with no-op
 uint8 constant HOOKS_BEFORE_INITIALIZE_OFFSET = 0;

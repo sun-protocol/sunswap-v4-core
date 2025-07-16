@@ -2,11 +2,11 @@
 // Copyright (C) 2024 PancakeSwap
 pragma solidity 0.8.26;
 
-import {IProtocolFeeController} from "../interfaces/IProtocolFeeController.sol";
-import {PausableRole} from "../base/PausableRole.sol";
-import {PoolManagerOwnable2Step} from "../base/PoolManagerOwnable2Step.sol";
+import {IProtocolFeeController} from "./interfaces/IProtocolFeeController.sol";
+import {PausableRole} from "./base/PausableRole.sol";
+import {PoolManagerOwnable2Step} from "./base/PoolManagerOwnable2Step.sol";
 import {ICLPoolManager} from "./interfaces/ICLPoolManager.sol";
-import {IPoolManagerOwner} from "../interfaces/IPoolManagerOwner.sol";
+import {IPoolManagerOwner} from "./interfaces/IPoolManagerOwner.sol";
 
 /// @dev added interface in this file to avoid polluting other files in repository
 interface ICLPoolManagerWithPauseOwnable is ICLPoolManager {

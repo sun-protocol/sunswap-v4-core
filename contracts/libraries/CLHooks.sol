@@ -3,14 +3,14 @@
 pragma solidity ^0.8.0;
 
 import "../interfaces/ICLHooks.sol";
-import {PoolKey} from "../../types/PoolKey.sol";
+import {PoolKey} from "../types/PoolKey.sol";
 import {ICLPoolManager} from "../interfaces/ICLPoolManager.sol";
-import {Hooks} from "../../libraries/Hooks.sol";
-import {BalanceDelta, BalanceDeltaLibrary, toBalanceDelta} from "../../types/BalanceDelta.sol";
-import {LPFeeLibrary} from "../../libraries/LPFeeLibrary.sol";
-import {BeforeSwapDeltaLibrary, BeforeSwapDelta} from "../../types/BeforeSwapDelta.sol";
-import {ParseBytes} from "../../libraries/ParseBytes.sol";
-import {SafeCast} from "../../libraries/SafeCast.sol";
+import {Hooks} from "../libraries/Hooks.sol";
+import {BalanceDelta, BalanceDeltaLibrary, toBalanceDelta} from "../types/BalanceDelta.sol";
+import {LPFeeLibrary} from "../libraries/LPFeeLibrary.sol";
+import {BeforeSwapDeltaLibrary, BeforeSwapDelta} from "../types/BeforeSwapDelta.sol";
+import {ParseBytes} from "../libraries/ParseBytes.sol";
+import {SafeCast} from "../libraries/SafeCast.sol";
 
 library CLHooks {
     using Hooks for bytes32;

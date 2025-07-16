@@ -1,0 +1,6 @@
+{
+  "checkTicks": "1622",
+  "getFeeGrowthInside": "55879",
+  "testTick_update_gasCost": "138457",
+  "tickSpacingToMaxLiquidityPerTick": "707"
+}

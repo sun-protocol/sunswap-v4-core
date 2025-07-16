@@ -4,18 +4,18 @@ pragma solidity ^0.8.0;
 
 import {CLPosition} from "./CLPosition.sol";
 import {TickMath} from "./TickMath.sol";
-import {BalanceDelta, BalanceDeltaLibrary, toBalanceDelta} from "../../types/BalanceDelta.sol";
+import {BalanceDelta, BalanceDeltaLibrary, toBalanceDelta} from "../types/BalanceDelta.sol";
 import {CLSlot0} from "../types/CLSlot0.sol";
 import {Tick} from "./Tick.sol";
 import {TickBitmap} from "./TickBitmap.sol";
 import {SqrtPriceMath} from "./SqrtPriceMath.sol";
-import {SafeCast} from "../../libraries/SafeCast.sol";
+import {SafeCast} from "../libraries/SafeCast.sol";
 import {FixedPoint128} from "./FixedPoint128.sol";
-import {UnsafeMath} from "../../libraries/math/UnsafeMath.sol";
+import {UnsafeMath} from "../libraries/math/UnsafeMath.sol";
 import {SwapMath} from "./SwapMath.sol";
 import {LiquidityMath} from "./LiquidityMath.sol";
-import {ProtocolFeeLibrary} from "../../libraries/ProtocolFeeLibrary.sol";
-import {LPFeeLibrary} from "../../libraries/LPFeeLibrary.sol";
+import {ProtocolFeeLibrary} from "../libraries/ProtocolFeeLibrary.sol";
+import {LPFeeLibrary} from "../libraries/LPFeeLibrary.sol";
 
 /// @notice a library with all actions that can be performed on cl pool
 library CLPool {

@@ -2,7 +2,7 @@
 // Copyright (C) 2024 PancakeSwap
 pragma solidity ^0.8.0;
 
-import {Encoded} from "../../libraries/math/Encoded.sol";
+import {Encoded} from "../libraries/math/Encoded.sol";
 
 /**
  * @title Concentrated Liquidity Pair Parameter Helper Library

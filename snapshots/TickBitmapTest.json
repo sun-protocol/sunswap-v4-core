@@ -1,0 +1,11 @@
+{
+  "flipTick_gasCostOfFlippingATickThatResultsInDeletingAWord": "79059",
+  "flipTick_gasCostOfFlippingFirstTickInWordToInitialized": "79059",
+  "flipTick_gasCostOfFlippingSecondTickInWordToInitialized": "79059",
+  "nextInitializedTickWithinOneWord_lteFalse_gasCostForEntireWord": "79059",
+  "nextInitializedTickWithinOneWord_lteFalse_gasCostJustBelowBoundary": "79059",
+  "nextInitializedTickWithinOneWord_lteFalse_gasCostOnBoundary": "79059",
+  "nextInitializedTickWithinOneWord_lteTrue_gasCostForEntireWord": "79059",
+  "nextInitializedTickWithinOneWord_lteTrue_gasCostJustBelowBoundary": "79059",
+  "nextInitializedTickWithinOneWord_lteTrue_gasCostOnBoundary": "79059"
+}

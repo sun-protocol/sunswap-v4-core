@@ -2,7 +2,7 @@
 // Copyright (C) 2024 PancakeSwap
 pragma solidity ^0.8.0;
 
-import "../../libraries/SafeCast.sol";
+import "../libraries/SafeCast.sol";
 import "./TickMath.sol";
 import "./LiquidityMath.sol";
 
