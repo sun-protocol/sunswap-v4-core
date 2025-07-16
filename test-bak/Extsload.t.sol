@@ -2,10 +2,9 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {CLPoolManager} from "../src/pool-cl/CLPoolManager.sol";
-import {Vault} from "../src/Vault.sol";
+import {PoolManager} from "../src/PoolManager.sol";
 import {IVault} from "../src/interfaces/IVault.sol";
-import {ICLPoolManager} from "../src/pool-cl/interfaces/ICLPoolManager.sol";
+import {ICLPoolManager} from "../src/interfaces/ICLPoolManager.sol";
 import {IProtocolFeeController} from "../src/interfaces/IProtocolFeeController.sol";
 import {Extsload} from "../src/Extsload.sol";
 
@@ -26,8 +25,7 @@ contract ExtsloadTest is Test {
     Loadable loadable = new Loadable();
 
     function setUp() public {
-        IVault vault = new Vault();
-        poolManager = new CLPoolManager(vault);
+        poolManager = new PoolManager(0xabcd);
 
         poolManager.setProtocolFeeController(IProtocolFeeController(address(0xabcd)));
     }

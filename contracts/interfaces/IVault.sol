@@ -72,7 +72,7 @@ interface IVault is IVaultToken {
         address settler,
         BalanceDelta hookDelta,
         address hook
-    ) external;
+    ) internal;
 
     /// @notice Called by registered app to account for a change in the pool balance,
     /// convenient for AMM pool manager, typically after modifyLiquidity, swap, donate

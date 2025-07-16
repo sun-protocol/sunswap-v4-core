@@ -8,6 +8,7 @@ import "@sun-protocol/sun-studio";
 import "@nomicfoundation/hardhat-foundry";
 
 const settings = {
+  evmVersion: "cancun",
   optimizer: {
     enabled: true,
     runs: 999999,

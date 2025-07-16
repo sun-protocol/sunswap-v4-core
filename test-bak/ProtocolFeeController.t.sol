@@ -2,9 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {Vault} from "../src/Vault.sol";
-import {CLPoolManager} from "../src/pool-cl/CLPoolManager.sol";
-import {BinPoolManager} from "../src/pool-bin/BinPoolManager.sol";
+import {PoolManager} from "../src/PoolManager.sol";
 import {ProtocolFeeController} from "../src/ProtocolFeeController.sol";
 import {PoolKey} from "../src/types/PoolKey.sol";
 import {LPFeeLibrary} from "../src/libraries/LPFeeLibrary.sol";

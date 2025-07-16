@@ -5,7 +5,7 @@
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@nomiclabs/hardhat-vyper": "^3.0.8",
     "@sun-protocol/sun-studio": "0.2.2",
-    "hardhat": "^2.23.0"
+    "hardhat": "2.25.0"
   },
   "scripts": {
     "start": "hardhat node",

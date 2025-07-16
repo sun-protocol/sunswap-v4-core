@@ -2,7 +2,7 @@
 // Copyright (C) 2024 PancakeSwap
 pragma solidity ^0.8.0;
 
-import {Owner} from "./Owner.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable2Step.sol";
 import {Currency} from "./types/Currency.sol";
 import {IProtocolFeeController} from "./interfaces/IProtocolFeeController.sol";
 import {IProtocolFees} from "./interfaces/IProtocolFees.sol";
@@ -12,7 +12,7 @@ import {PoolId} from "./types/PoolId.sol";
 import {IVault} from "./interfaces/IVault.sol";
 import {CustomRevert} from "./libraries/CustomRevert.sol";
 
-abstract contract ProtocolFees is IProtocolFees, Owner {
+abstract contract ProtocolFees is IProtocolFees, Ownable {
     using ProtocolFeeLibrary for uint24;
 
     /// @inheritdoc IProtocolFees
@@ -24,7 +24,7 @@ abstract contract ProtocolFees is IProtocolFees, Owner {
     /// @inheritdoc IProtocolFees
     IVault public immutable vault;
 
-    constructor(IVault _vault) {
+    constructor(IVault _vault) Ownable(msg.sender) {
         vault = _vault;
     }
 
