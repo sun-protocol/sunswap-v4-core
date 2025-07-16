@@ -33,8 +33,9 @@ import {Currency} from "./types/Currency.sol";
 import {TickMath} from "./libraries/TickMath.sol";
 import {CLSlot0} from "./types/CLSlot0.sol";
 import {VaultAppDeltaSettlement} from "./libraries/VaultAppDeltaSettlement.sol";
+import {NoDelegateCall} from "./NoDelegateCall.sol";
 
-contract PoolManager is IVault, VaultToken, Ownable2Step, Ownable2Step, ICLPoolManager, ProtocolFees, NoDelegateCall, Extsload{
+contract PoolManager is IVault, VaultToken, Ownable2Step, ICLPoolManager, ProtocolFees, NoDelegateCall, Extsload{
     using Hooks for bytes32;
     using LPFeeLibrary for uint24;
     using CLPoolParametersHelper for bytes32;
@@ -169,8 +170,8 @@ contract PoolManager is IVault, VaultToken, Ownable2Step, Ownable2Step, ICLPoolM
 
         /// @dev call _accountDeltaForApp once with both delta/hookDelta to save gas and prevent
         /// reservesOfApp from underflow when it deduct before addition
-        _accountDeltaForApp(currency0, delta0 + hookDelta0);
-        _accountDeltaForApp(currency1, delta1 + hookDelta1);
+        // _accountDeltaForApp(currency0, delta0 + hookDelta0);
+        // _accountDeltaForApp(currency1, delta1 + hookDelta1);
 
         // keep track of the balance on vault level
         SettlementGuard.accountDelta(settler, currency0, delta0);
@@ -186,8 +187,8 @@ contract PoolManager is IVault, VaultToken, Ownable2Step, Ownable2Step, ICLPoolM
         int128 delta1 = delta.amount1();
 
         // keep track of the balance on app level
-        _accountDeltaForApp(currency0, delta0);
-        _accountDeltaForApp(currency1, delta1);
+        // _accountDeltaForApp(currency0, delta0);
+        // _accountDeltaForApp(currency1, delta1);
 
         // keep track of the balance on vault level
         SettlementGuard.accountDelta(settler, currency0, delta0);
@@ -201,7 +202,7 @@ contract PoolManager is IVault, VaultToken, Ownable2Step, Ownable2Step, ICLPoolM
         isLocked
         
     {
-        _accountDeltaForApp(currency, delta);
+        // _accountDeltaForApp(currency, delta);
         SettlementGuard.accountDelta(settler, currency, delta);
     }
 
@@ -262,7 +263,6 @@ contract PoolManager is IVault, VaultToken, Ownable2Step, Ownable2Step, ICLPoolM
         // prevent transfer between the sync and settle balanceOfs (native settle uses msg.value)
         (Currency syncedCurrency,) = VaultReserve.getVaultReserve();
         if (!currency.isNative() && syncedCurrency == currency) revert FeeCurrencySynced();
-        reservesOfApp[msg.sender][currency] -= amount;
         currency.transfer(recipient, amount);
     }
 
@@ -347,7 +347,7 @@ contract PoolManager is IVault, VaultToken, Ownable2Step, Ownable2Step, ICLPoolM
         // notice that both generated delta and feeDelta (from lpFee) will both be counted on the user
         (delta, hookDelta) = CLHooks.afterModifyLiquidity(key, params, delta + feeDelta, feeDelta, hookData);
 
-        accountAppDeltaWithHookDelta(key, delta, hookDelta);
+        VaultAppDeltaSettlement.accountAppDeltaWithHookDelta(key, delta, hookDelta);
     }
 
     /// @inheritdoc ICLPoolManager
@@ -401,7 +401,7 @@ contract PoolManager is IVault, VaultToken, Ownable2Step, Ownable2Step, ICLPoolM
         /// @dev delta already includes protocol fee
         (delta, hookDelta) = CLHooks.afterSwap(key, params, delta, hookData, beforeSwapDelta);
 
-        accountAppDeltaWithHookDelta(key, delta, hookDelta);
+        VaultAppDeltaSettlement.accountAppDeltaWithHookDelta(key, delta, hookDelta);
     }
 
     /// @inheritdoc ICLPoolManager
@@ -447,18 +447,18 @@ contract PoolManager is IVault, VaultToken, Ownable2Step, Ownable2Step, ICLPoolM
     // receive() external payable {}
     // fallback() external payable {}
 
-    function _accountDeltaForApp(Currency currency, int128 delta) internal {
-        if (delta == 0) return;
+    // function _accountDeltaForApp(Currency currency, int128 delta) internal {
+    //     if (delta == 0) return;
 
-        /// @dev optimization: msg.sender will always be app address, verification should be done on caller address
-        if (delta >= 0) {
-            /// @dev arithmetic underflow make sure trader can't withdraw too much from app
-            reservesOfApp[msg.sender][currency] -= uint128(delta);
-        } else {
-            /// @dev arithmetic overflow make sure trader won't deposit too much into app
-            reservesOfApp[msg.sender][currency] += uint128(-delta);
-        }
-    }
+    //     /// @dev optimization: msg.sender will always be app address, verification should be done on caller address
+    //     if (delta >= 0) {
+    //         /// @dev arithmetic underflow make sure trader can't withdraw too much from app
+    //         reservesOfApp[msg.sender][currency] -= uint128(delta);
+    //     } else {
+    //         /// @dev arithmetic overflow make sure trader won't deposit too much into app
+    //         reservesOfApp[msg.sender][currency] += uint128(-delta);
+    //     }
+    // }
 
     // if settling native, integrators should still call `sync` first to avoid DoS attack vectors
     function _settle(address recipient) internal returns (uint256 paid) {
