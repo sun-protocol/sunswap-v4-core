@@ -2,7 +2,6 @@
 // Copyright (C) 2024 PancakeSwap
 pragma solidity 0.8.26;
 
-import {Ownable, Ownable2Step} from "@openzeppelin/contracts/access/Ownable2Step.sol";
 import {IVault, IVaultToken} from "./interfaces/IVault.sol";
 import {SettlementGuard} from "./libraries/SettlementGuard.sol";
 import {Currency, CurrencyLibrary} from "./types/Currency.sol";
@@ -35,7 +34,7 @@ import {CLSlot0} from "./types/CLSlot0.sol";
 import {VaultAppDeltaSettlement} from "./libraries/VaultAppDeltaSettlement.sol";
 import {NoDelegateCall} from "./NoDelegateCall.sol";
 
-contract PoolManager is IVault, VaultToken, Ownable2Step, ICLPoolManager, ProtocolFees, NoDelegateCall, Extsload{
+contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDelegateCall, Extsload{
     using Hooks for bytes32;
     using LPFeeLibrary for uint24;
     using CLPoolParametersHelper for bytes32;
@@ -55,7 +54,7 @@ contract PoolManager is IVault, VaultToken, Ownable2Step, ICLPoolManager, Protoc
 
     uint256 public poolCount;   // to keep track of total number of pools
 
-    constructor() Ownable(msg.sender) {}
+    constructor() ProtocolFees(address(this)) {}
 
     /// @notice revert if no locker is set
     modifier isLocked() {
@@ -197,7 +196,7 @@ contract PoolManager is IVault, VaultToken, Ownable2Step, ICLPoolManager, Protoc
 
     /// @inheritdoc IVault
     function accountAppBalanceDelta(Currency currency, int128 delta, address settler)
-        external
+        internal
         override
         isLocked
         

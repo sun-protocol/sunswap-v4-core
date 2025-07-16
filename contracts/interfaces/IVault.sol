@@ -81,13 +81,14 @@ interface IVault is IVaultToken {
     /// @param delta The change in the pool's balance
     /// @param settler The address whose delta will be updated
     function accountAppBalanceDelta(Currency currency0, Currency currency1, BalanceDelta delta, address settler)
-        external;
+        internal;
 
     /// @notice This works as a general accounting mechanism for non-dex app
     /// @param currency The currency to update
     /// @param delta The change in the balance
     /// @param settler The address whose delta will be updated
-    function accountAppBalanceDelta(Currency currency, int128 delta, address settler) external;
+    function accountAppBalanceDelta(Currency currency, int128 delta, address settler) 
+        internal;
 
     /// @notice Called by the user to net out some value owed to the user
     /// @dev Will revert if the requested amount is not available, consider using `mint` instead
