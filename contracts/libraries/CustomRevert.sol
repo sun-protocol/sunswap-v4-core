@@ -7,7 +7,73 @@ pragma solidity ^0.8.0;
 library CustomRevert {
     /// @dev ERC-7751 error for wrapping bubbled up reverts
     error WrappedError(address target, bytes4 selector, bytes reason, bytes details);
+/// @dev Reverts with the selector of a custom error in the scratch space
+    function revertWith(bytes4 selector) internal pure {
+        assembly ("memory-safe") {
+            mstore(0, selector)
+            revert(0, 0x04)
+        }
+    }
 
+    /// @dev Reverts with a custom error with an address argument in the scratch space
+    function revertWith(bytes4 selector, address addr) internal pure {
+        assembly ("memory-safe") {
+            mstore(0, selector)
+            mstore(0x04, and(addr, 0xffffffffffffffffffffffffffffffffffffffff))
+            revert(0, 0x24)
+        }
+    }
+
+    /// @dev Reverts with a custom error with an int24 argument in the scratch space
+    function revertWith(bytes4 selector, int24 value) internal pure {
+        assembly ("memory-safe") {
+            mstore(0, selector)
+            mstore(0x04, signextend(2, value))
+            revert(0, 0x24)
+        }
+    }
+
+    /// @dev Reverts with a custom error with a uint160 argument in the scratch space
+    function revertWith(bytes4 selector, uint160 value) internal pure {
+        assembly ("memory-safe") {
+            mstore(0, selector)
+            mstore(0x04, and(value, 0xffffffffffffffffffffffffffffffffffffffff))
+            revert(0, 0x24)
+        }
+    }
+
+    /// @dev Reverts with a custom error with two int24 arguments
+    function revertWith(bytes4 selector, int24 value1, int24 value2) internal pure {
+        assembly ("memory-safe") {
+            let fmp := mload(0x40)
+            mstore(fmp, selector)
+            mstore(add(fmp, 0x04), signextend(2, value1))
+            mstore(add(fmp, 0x24), signextend(2, value2))
+            revert(fmp, 0x44)
+        }
+    }
+
+    /// @dev Reverts with a custom error with two uint160 arguments
+    function revertWith(bytes4 selector, uint160 value1, uint160 value2) internal pure {
+        assembly ("memory-safe") {
+            let fmp := mload(0x40)
+            mstore(fmp, selector)
+            mstore(add(fmp, 0x04), and(value1, 0xffffffffffffffffffffffffffffffffffffffff))
+            mstore(add(fmp, 0x24), and(value2, 0xffffffffffffffffffffffffffffffffffffffff))
+            revert(fmp, 0x44)
+        }
+    }
+
+    /// @dev Reverts with a custom error with two address arguments
+    function revertWith(bytes4 selector, address value1, address value2) internal pure {
+        assembly ("memory-safe") {
+            let fmp := mload(0x40)
+            mstore(fmp, selector)
+            mstore(add(fmp, 0x04), and(value1, 0xffffffffffffffffffffffffffffffffffffffff))
+            mstore(add(fmp, 0x24), and(value2, 0xffffffffffffffffffffffffffffffffffffffff))
+            revert(fmp, 0x44)
+        }
+    }
     /// @notice bubble up the revert message returned by a call and revert with a wrapped ERC-7751 error
     /// @dev this method can be vulnerable to revert data bombs
     function bubbleUpAndRevertWith(
