@@ -30,14 +30,6 @@ interface IVault is IVaultToken {
     /// @notice Thrown when collectFee is attempted on a token that is synced.
     error FeeCurrencySynced();
 
-    function isAppRegistered(address app) external returns (bool);
-
-    /// @notice Returns the reserves for a a given pool type and currency
-    function reservesOfApp(address app, Currency currency) external view returns (uint256);
-
-    /// @notice register an app so that it can perform accounting base on vault
-    function registerApp(address app) external;
-
     /// @notice Returns the locker who is locking the vault
     function getLocker() external view returns (address locker);
 
