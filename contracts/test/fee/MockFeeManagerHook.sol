@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {IHooks} from "../../interfaces/IHooks.sol";
-import {IBinPoolManager} from "../../pool-bin/interfaces/IBinPoolManager.sol";
+import {IPoolManager} from "../../interfaces/IPoolManager.sol";
 import {PoolKey} from "../../types/PoolKey.sol";
 
 /**
@@ -30,7 +30,7 @@ contract MockFeeManagerHook is IHooks {
 
     // swap fee for dynamic fee pool is 0 by default, so we need to update it after pool initialization
     function afterInitialize(address, PoolKey calldata key, uint24) external returns (bytes4) {
-        IBinPoolManager(msg.sender).updateDynamicLPFee(key, swapfee);
+        IPoolManager(msg.sender).updateDynamicLPFee(key, swapfee);
         return MockFeeManagerHook.afterInitialize.selector;
     }
 }
