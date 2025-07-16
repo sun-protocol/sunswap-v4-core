@@ -1,7 +1,0 @@
-{
-  "Vault initcode hash (without constructor params, as uint256)": "98685589090063010329017162146733355715703355844896793090273106218542594655809",
-  "VaultBytecodeSize": "12368",
-  "registerPoolManager": "25195",
-  "testVault_clear_successWithNonZeroExistingDelta": "6897",
-  "testVault_clear_successWithZeroExistingDelta": "3797"
-}
