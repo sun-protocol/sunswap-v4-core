@@ -24,9 +24,7 @@ abstract contract ProtocolFees is IProtocolFees, Ownable {
     /// @inheritdoc IProtocolFees
     IVault public immutable vault;
 
-    constructor(IVault _vault) Ownable(msg.sender) {
-        vault = _vault;
-    }
+    constructor(address InitialOwner) Ownable(InitialOwner) {}
 
     function _setProtocolFee(PoolId id, uint24 newProtocolFee) internal virtual;
 

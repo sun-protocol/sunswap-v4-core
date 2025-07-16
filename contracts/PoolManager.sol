@@ -31,7 +31,6 @@ import {BeforeSwapDelta} from "./types/BeforeSwapDelta.sol";
 import {Currency} from "./types/Currency.sol";
 import {TickMath} from "./libraries/TickMath.sol";
 import {CLSlot0} from "./types/CLSlot0.sol";
-import {VaultAppDeltaSettlement} from "./libraries/VaultAppDeltaSettlement.sol";
 import {NoDelegateCall} from "./NoDelegateCall.sol";
 
 contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDelegateCall, Extsload{
@@ -41,7 +40,6 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
     using CLPool for *;
     using CLPosition for mapping(bytes32 => CLPosition.Info);
     using CLPoolGetters for CLPool.State;
-    using VaultAppDeltaSettlement for IVault;
     using SafeCast for *;
     using CurrencyLibrary for Currency;
 
@@ -54,7 +52,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
 
     uint256 public poolCount;   // to keep track of total number of pools
 
-    constructor() ProtocolFees(address(this)) {}
+    constructor() ProtocolFees(msg.sender) {}
 
     /// @notice revert if no locker is set
     modifier isLocked() {
@@ -150,12 +148,10 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         return pools[id].getFeeGrowthGlobals();
     }
 
-    /// @inheritdoc IVault
     function getVaultReserve() external view returns (Currency, uint256) {
         return VaultReserve.getVaultReserve();
     }
 
-    /// @inheritdoc IVault
     function accountAppBalanceDelta(
         Currency currency0,
         Currency currency1,
@@ -179,7 +175,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         SettlementGuard.accountDelta(hook, currency1, hookDelta1);
     }
 
-    /// @inheritdoc IVault
+
     function accountAppBalanceDelta(Currency currency0, Currency currency1, BalanceDelta delta, address settler)
     internal {
         int128 delta0 = delta.amount0();
@@ -194,7 +190,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         SettlementGuard.accountDelta(settler, currency1, delta1);
     }
 
-    /// @inheritdoc IVault
+
     function accountAppBalanceDelta(Currency currency, int128 delta, address settler)
         internal
         isLocked
@@ -204,7 +200,6 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         SettlementGuard.accountDelta(settler, currency, delta);
     }
 
-    /// @inheritdoc IVault
     function take(Currency currency, address to, uint256 amount) external override isLocked {
         unchecked {
             SettlementGuard.accountDelta(msg.sender, currency, -(amount.toInt128()));
@@ -212,7 +207,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         }
     }
 
-    /// @inheritdoc IVault
+
     function mint(address to, Currency currency, uint256 amount) external override isLocked {
         unchecked {
             SettlementGuard.accountDelta(msg.sender, currency, -(amount.toInt128()));
@@ -343,7 +338,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         // notice that both generated delta and feeDelta (from lpFee) will both be counted on the user
         (delta, hookDelta) = CLHooks.afterModifyLiquidity(key, params, delta + feeDelta, feeDelta, hookData);
 
-        VaultAppDeltaSettlement.accountAppDeltaWithHookDelta(key, delta, hookDelta);
+       accountAppBalanceDelta(key.currency0, key.currency1, delta, msg.sender, hookDelta, address(key.hooks));
     }
 
     /// @inheritdoc ICLPoolManager
@@ -397,7 +392,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         /// @dev delta already includes protocol fee
         (delta, hookDelta) = CLHooks.afterSwap(key, params, delta, hookData, beforeSwapDelta);
 
-        VaultAppDeltaSettlement.accountAppDeltaWithHookDelta(key, delta, hookDelta);
+        accountAppBalanceDelta(key.currency0, key.currency1, delta, msg.sender, hookDelta, address(key.hooks));
     }
 
     /// @inheritdoc ICLPoolManager
