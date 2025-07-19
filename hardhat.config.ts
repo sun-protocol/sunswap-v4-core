@@ -13,6 +13,7 @@ const settings = {
     enabled: true,
     runs: 999999,
   },
+  viaIR: true, 
 };
 
 const config: HardhatUserConfig = {
