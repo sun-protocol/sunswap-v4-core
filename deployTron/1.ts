@@ -8,10 +8,9 @@ module.exports = async ({
   const {deployer} = await getNamedAccounts();
 
   // the following will only deploy "GenericMetaTxProcessor" if the contract was never deployed or if the code changed since last deployment
-  const res = await deploy('Lock', {
+  const res = await deploy('PoolManager', {
     from: deployer,
     gasLimit: 4000000,
-    args: [1893456000],
     tags: 'lumi',
   });
   console.log(res)
