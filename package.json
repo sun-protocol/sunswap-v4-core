@@ -5,7 +5,11 @@
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@nomiclabs/hardhat-vyper": "^3.0.8",
     "@sun-protocol/sun-studio": "0.2.2",
-    "hardhat": "2.25.0"
+    "@types/node": "^24.1.0",
+    "hardhat": "2.25.0",
+    "tronweb": "^6.0.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   },
   "scripts": {
     "start": "hardhat node",
@@ -22,7 +26,12 @@
     "deploy-tron2": "npx hardhat --network tron deploy --tags lumi2"
   },
   "dependencies": {
-    "dotenv": "^16.4.7",
-    "ethers": "^6.13.5"
+    "@pancakeswap/infinity-sdk": "^1.0.3",
+    "@pancakeswap/permit2-sdk": "^1.1.4",
+    "@pancakeswap/swap-sdk-core": "^1.4.0",
+    "decimal.js": "^10.6.0",
+    "dotenv": "^16.6.1",
+    "ethers": "^6.13.5",
+    "web3": "^4.16.0"
   }
 }
