@@ -350,8 +350,8 @@ async function preflight() {
   const PM_B58 = 'TUrtUhPsLRQNYJRPBjyCh7a8zcMmwrrFTi'
   const USER_B58 = 'TNmoJ3Be59WFEq5dsW6eCkZjveiL3G8HVB'
 
-  const SUN = await tronWeb.contract(ERC20_ABI, SUN_B58)
-  const P2 = await tronWeb.contract(PERMIT2_ABI, PERMIT2_B58)
+  const SUN = await tronWeb.contract(ERC20_ABI as any, SUN_B58)
+  const P2 = await tronWeb.contract(PERMIT2_ABI as any, PERMIT2_B58)
 
   // 查餘額
   const bal = await SUN.balanceOf(USER_B58).call()

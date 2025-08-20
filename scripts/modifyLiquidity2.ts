@@ -58,8 +58,8 @@ const TOKEN1_DECIMALS = parseInt(process.env.TOKEN1_DECIMALS || '18', 10)
 const TOKEN1_AMOUNT = 514071
 
 // Desired deposit amounts (human units)
-const DESIRED_AMOUNT0 = process.env.AMOUNT0 || '15'
-const DESIRED_AMOUNT1 = process.env.AMOUNT1 || '15'
+const DESIRED_AMOUNT0 = process.env.AMOUNT0 || '100'
+const DESIRED_AMOUNT1 = process.env.AMOUNT1 || '514071'
 
 // pool params
 const hooks = '0x0000000000000000000000000000000000000000'
@@ -82,7 +82,7 @@ export const generatePermit2SignatureForScript = async (
   chainId: number
 ): Promise<Permit2Signature> => {
   // Convert private key to account
-  const account = privateKeyToAccount(privateKeyHex as `0x${string}`)
+  // const account = privateKeyToAccount(privateKeyHex as `0x${string}`)
 
   // Get permit2 contract address
   //   const permit2Address = getPermit2Address(chainId)
@@ -100,13 +100,26 @@ export const generatePermit2SignatureForScript = async (
     values: message,
   } = AllowanceTransfer.getPermitData(permit, toEthHex20(PERMIT2_ADDRESS) as `0x${string}`, chainId)
 
+  let signature = tronWeb.trx._signTypedData(domain, types, message)
+
+  // const tail = signature.substring(128, 130)
+  // if (tail == '01') {
+  //   signature = signature.substring(0, 128) + '1c'
+  // } else if (tail == '00') {
+  //   signature = signature.substring(0, 128) + '1b'
+  // }
+
+  const result = await tronWeb.trx.verifyTypedData(domain, types, message, signature)
+
+  console.log('✅ Permit signature verified', result)
+
   // Sign the typed data with private key
-  const signature = await account.signTypedData({
-    domain,
-    primaryType: 'PermitSingle',
-    types,
-    message,
-  })
+  // const signature = await account.signTypedData({
+  //   domain,
+  //   primaryType: 'PermitSingle',
+  //   types,
+  //   message,
+  // })
 
   // Return the complete permit2 signature
   return {
@@ -118,7 +131,7 @@ export const generatePermit2SignatureForScript = async (
     },
     spender: spender,
     sigDeadline: deadline.toString(),
-    signature: signature,
+    signature: signature as `0x${string}`,
   }
 }
 
@@ -138,7 +151,7 @@ export const testAddLiquidity = async () => {
 
   // Test parameters
   let token0 = new Token(
-    1001, // Nile
+    3448148188, // Nile
     toEthHex20(token0Raw) as `0x${string}`, // CAKE
     token0Decimals,
     TOKEN0_SYMBOL,
@@ -146,7 +159,7 @@ export const testAddLiquidity = async () => {
   )
 
   let token1 = new Token(
-    1001, // Nile
+    3448148188, // Nile
     toEthHex20(token1Raw) as `0x${string}`, // WBNB
     token1Decimals,
     TOKEN1_SYMBOL,
@@ -165,9 +178,8 @@ export const testAddLiquidity = async () => {
   }
 
   const poolKey = createPoolKey(token0Raw, token1Raw, hooks, POOL_MANAGER_ADDRESS, fee, tickSpacing)
-  const base = 1000
-  const tickLower = alignToSpacing(-base * tickSpacing, tickSpacing)
-  const tickUpper = alignToSpacing(base * tickSpacing, tickSpacing)
+  const tickLower = alignToSpacing(360000, tickSpacing)
+  const tickUpper = alignToSpacing(361000, tickSpacing)
 
   const desired0Raw = toRawAmount(amount0Human.toFixed(), token0Decimals)
   const desired1Raw = toRawAmount(amount1Human.toFixed(), token1Decimals)
@@ -223,7 +235,7 @@ export const testAddLiquidity = async () => {
         console.log('amount:', parseInt(amountHex, 16))
         console.log('expiration:', parseInt(expirationHex, 16))
         console.log('nonce:', nonce)
-        nextNonce = nonce + 1
+        nextNonce = nonce
       }
 
       return nextNonce
@@ -233,31 +245,34 @@ export const testAddLiquidity = async () => {
     let token1Permit2Signature: Permit2Signature | null = null
 
     if (token0.address != NATIVE_HEX) {
-      const nonce0 = await getNextNonce(account.address, token0.address)
+      // const nonce0 = await getNextNonce(account.address, token0.address)
 
-      // Generate permit2 signatures
-      token0Permit2Signature = await generatePermit2SignatureForScript(
-        PRIVATE_KEY,
-        token0,
-        toEthHex20(POSITION_MANAGER_ADDRESS) as `0x${string}`,
-        amount0,
-        nonce0,
-        deadline,
-        1001
-      )
+      // // // Generate permit2 signatures
+      // token0Permit2Signature = await generatePermit2SignatureForScript(
+      //   PRIVATE_KEY,
+      //   token0,
+      //   toEthHex20(POSITION_MANAGER_ADDRESS) as `0x${string}`,
+      //   amount0,
+      //   nonce0,
+      //   deadline,
+      //   3448148188
+      // )
+
+      await permit2Approve(token0.address, amount0.toString())
     }
 
     if (token1.address != NATIVE_HEX) {
-      const nonce1 = await getNextNonce(account.address, token1.address)
-      token1Permit2Signature = await generatePermit2SignatureForScript(
-        PRIVATE_KEY,
-        token1,
-        toEthHex20(POSITION_MANAGER_ADDRESS) as `0x${string}`,
-        amount1,
-        nonce1,
-        deadline,
-        1001
-      )
+      // const nonce1 = await getNextNonce(account.address, token1.address)
+      // token1Permit2Signature = await generatePermit2SignatureForScript(
+      //   PRIVATE_KEY,
+      //   token1,
+      //   toEthHex20(POSITION_MANAGER_ADDRESS) as `0x${string}`,
+      //   amount1,
+      //   nonce1,
+      //   deadline,
+      //   3448148188
+      // )
+      await permit2Approve(token1.address, amount1.toString())
     }
 
     console.log('Token0 Permit2 Signature:', token0Permit2Signature)
@@ -289,6 +304,7 @@ export const testAddLiquidity = async () => {
     // Now you can use these signatures in addCLLiquidityMulticall
 
     const input = {
+      // tokenId: 2n,
       isInitialized: true,
       sqrtPriceX96: 0n, // Your sqrt price
       positionConfig: {
@@ -396,6 +412,29 @@ const getTransactionInfo = async (txid: string) => {
     console.log('Result:', receipt.receipt.result)
     console.log('Energy usage:', receipt.receipt.energy_usage)
     console.log('Contract address:', receipt.contract_address)
+  }
+}
+
+async function permit2Approve(tokenAddr: string, amount: string) {
+  if (!PERMIT2_ADDRESS) return
+  const expiration = (Math.floor(Date.now() / 1000) + 3600).toString()
+  const ownerHex = tronWeb.address.toHex(tronWeb.defaultAddress.base58 as string)
+  const built = await tronWeb.transactionBuilder.triggerSmartContract(
+    PERMIT2_ADDRESS,
+    'approve(address,address,uint160,uint48)',
+    { feeLimit: 100_000_000, callValue: 0 },
+    [
+      { type: 'address', value: tokenAddr },
+      { type: 'address', value: POSITION_MANAGER_ADDRESS },
+      { type: 'uint160', value: amount },
+      { type: 'uint48', value: expiration },
+    ],
+    ownerHex
+  )
+  if (built.result && built.result.result) {
+    const signed = await tronWeb.trx.sign(built.transaction)
+    const res = await tronWeb.trx.sendRawTransaction(signed)
+    console.log('✅ Permit2 approve transaction sent', res)
   }
 }
 
