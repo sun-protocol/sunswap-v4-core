@@ -29,6 +29,7 @@
     "@pancakeswap/infinity-sdk": "^1.0.3",
     "@pancakeswap/permit2-sdk": "^1.1.4",
     "@pancakeswap/swap-sdk-core": "^1.4.0",
+    "@uniswap/permit2-sdk": "^1.4.0",
     "decimal.js": "^10.6.0",
     "dotenv": "^16.6.1",
     "ethers": "^6.13.5",
