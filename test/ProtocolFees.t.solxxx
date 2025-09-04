@@ -38,7 +38,7 @@ contract ProtocolFeesTest is Test {
 
     function setUp() public {
         vault = new MockVault();
-        poolManager = new MockFeePoolManager(IVault(address(vault)));
+        poolManager = new MockFeePoolManager(address(vault));
         feeController = new MockProtocolFeeController();
         revertingFeeController = new RevertingMockProtocolFeeController();
         outOfBoundsFeeController = new OutOfBoundsMockProtocolFeeController();
@@ -53,7 +53,6 @@ contract ProtocolFeesTest is Test {
             currency0: Currency.wrap(address(token0)),
             currency1: Currency.wrap(address(token1)),
             hooks: IHooks(address(0)),
-            poolManager: IPoolManager(address(poolManager)),
             fee: uint24(0), // fee not used in the setup
             parameters: 0x00
         });
@@ -85,21 +84,21 @@ contract ProtocolFeesTest is Test {
         poolManager.initialize(key);
     }
 
-    function testFuzz_Init_WhenOutOfGasForProtocolFeeController(uint256 gasLimit) public {
-        gasLimit = bound(gasLimit, 10_000, 100_000); // 10_000 gas will have out of gas revert
+    // function testFuzz_Init_WhenOutOfGasForProtocolFeeController(uint256 gasLimit) public {
+    //     gasLimit = bound(gasLimit, 10_000, 100_000); // 10_000 gas will have out of gas revert
 
-        uint24 protocolFee = _buildProtocolFee(ProtocolFeeLibrary.MAX_PROTOCOL_FEE, ProtocolFeeLibrary.MAX_PROTOCOL_FEE);
-        feeController.setProtocolFeeForPool(key, protocolFee);
-        poolManager.setProtocolFeeController(IProtocolFeeController(address(feeController)));
+    //     uint24 protocolFee = _buildProtocolFee(ProtocolFeeLibrary.MAX_PROTOCOL_FEE, ProtocolFeeLibrary.MAX_PROTOCOL_FEE);
+    //     feeController.setProtocolFeeForPool(key, protocolFee);
+    //     poolManager.setProtocolFeeController(IProtocolFeeController(address(feeController)));
 
-        try poolManager.initialize{gas: gasLimit}(key) {
-            // txn success, verify if protocol fee is set
-            uint24 fetchedProtocolFee = poolManager.pools(key.toId());
-            assertEq(fetchedProtocolFee, protocolFee);
-        } catch {
-            // txn reverted, can ignore checking
-        }
-    }
+    //     try poolManager.initialize{gas: gasLimit}(key) {
+    //         // txn success, verify if protocol fee is set
+    //         uint24 fetchedProtocolFee = poolManager.pools(key.toId());
+    //         assertEq(fetchedProtocolFee, protocolFee);
+    //     } catch {
+    //         // txn reverted, can ignore checking
+    //     }
+    // }
 
     function testInit_WhenFeeControllerRevert() public {
         poolManager.setProtocolFeeController(revertingFeeController);

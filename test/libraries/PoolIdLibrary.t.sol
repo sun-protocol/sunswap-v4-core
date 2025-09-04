@@ -15,7 +15,7 @@ contract PoolIdLibraryTest is Test {
             currency0: Currency.wrap(makeAddr("currency0")),
             currency1: Currency.wrap(makeAddr("currency1")),
             hooks: IHooks(makeAddr("hook")),
-            poolManager: IPoolManager(makeAddr("pm")),
+
             fee: 100,
             parameters: hex"1022"
         });

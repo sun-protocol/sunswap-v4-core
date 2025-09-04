@@ -8,28 +8,26 @@ import {Currency, CurrencyLibrary} from "../../src/types/Currency.sol";
 import {TokenFixture} from "../helpers/TokenFixture.sol";
 import {NoIsolate} from "../helpers/NoIsolate.sol";
 import {VaultReserve} from "../../src/libraries/VaultReserve.sol";
-import {FakePoolManager} from "./FakePoolManager.sol";
 import {PoolKey} from "../../src/types/PoolKey.sol";
 import {IHooks} from "../../src/interfaces/IHooks.sol";
 import {NativeERC20} from "../helpers/NativeERC20.sol";
+import {PoolManager} from "../../../src/PoolManager.sol";
+import {IVault} from "../../src/interfaces/IVault.sol";
 
 contract VaultSyncTest is Test, TokenFixture, NoIsolate {
-    Vault public vault;
-    FakePoolManager public fakePoolManager;
+    PoolManager public vault;
     PoolKey public poolKey;
 
     function setUp() public {
         initializeTokens();
 
-        vault = new Vault();
-        fakePoolManager = new FakePoolManager(vault);
-        vault.registerApp(address(fakePoolManager));
+        vault = new PoolManager();
+        // fakePoolManager = new FakePoolManager(vault);
 
         poolKey = PoolKey({
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: fakePoolManager,
             fee: 0,
             parameters: 0x00
         });

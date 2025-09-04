@@ -36,7 +36,7 @@ contract CLHookSkipCallbackTest is Test, Deployers, TokenFixture {
         poolManager = createFreshManager();
 
         router = new CLPoolManagerRouter(poolManager, poolManager);
-        clSkipCallbackHook = new CLSkipCallbackHook(poolManager);
+        clSkipCallbackHook = new CLSkipCallbackHook(poolManager,poolManager);
 
         IERC20(Currency.unwrap(currency0)).approve(address(router), 1000 ether);
         IERC20(Currency.unwrap(currency1)).approve(address(router), 1000 ether);
@@ -47,7 +47,6 @@ contract CLHookSkipCallbackTest is Test, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: clSkipCallbackHook,
-            poolManager: poolManager,
             fee: uint24(3000),
             parameters: bytes32(uint256(clSkipCallbackHook.getHooksRegistrationBitmap())).setTickSpacing(10)
         });

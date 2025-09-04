@@ -39,7 +39,7 @@ abstract contract V3Helper is Test {
     function setUp() public virtual {
         address deployedAddr;
         // relative to the root of the project
-        bytes memory bytecode = vm.readFileBinary("./test/pool-cl/bin/v3Factory.bytecode");
+        bytes memory bytecode = vm.readFileBinary("./test/bin/v3Factory.bytecode");
         assembly {
             deployedAddr := create(0, add(bytecode, 0x20), mload(bytecode))
         }

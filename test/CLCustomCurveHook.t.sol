@@ -7,7 +7,7 @@ import {IVault} from "../../src/interfaces/IVault.sol";
 import {PoolManager} from "../../src/PoolManager.sol";
 import {IPoolManager} from "../../src/interfaces/IPoolManager.sol";
 import {ICLPoolManager} from "../../src/interfaces/ICLPoolManager.sol";
-import {PoolManager} from "../../src/PoolManager.sol";
+import {PoolManager} from "../src/PoolManager.sol";
 import {CLPool} from "../../src/libraries/CLPool.sol";
 import {Currency, CurrencyLibrary} from "../../src/types/Currency.sol";
 import {PoolKey} from "../../src/types/PoolKey.sol";
@@ -46,8 +46,8 @@ contract CLCustomCurveHookTest is Test, Deployers, TokenFixture {
         token1.burn(address(this), token1.balanceOf(address(this)));
         (poolManager) = createFreshManager();
 
-        router = new CLPoolManagerRouter(poolManager);
-        clCustomCurveHook = new CLCustomCurveHook(poolManager);
+        router = new CLPoolManagerRouter(poolManager,poolManager);
+        clCustomCurveHook = new CLCustomCurveHook(poolManager,poolManager);
 
         IERC20(Currency.unwrap(currency0)).approve(address(router), 1000 ether);
         IERC20(Currency.unwrap(currency1)).approve(address(router), 1000 ether);
@@ -58,7 +58,6 @@ contract CLCustomCurveHookTest is Test, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: clCustomCurveHook,
-            poolManager: poolManager,
             fee: uint24(3000),
             parameters: bytes32(uint256(clCustomCurveHook.getHooksRegistrationBitmap())).setTickSpacing(10)
         });

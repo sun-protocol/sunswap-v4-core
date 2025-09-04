@@ -63,15 +63,15 @@ contract CLProtocolFeesTest is Test, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: hook,
-            poolManager: manager,
             fee: uint24(3000),
             parameters: bytes32(uint256((60 << 16) | hook.getHooksRegistrationBitmap()))
         });
 
         manager.initialize(key, SQRT_RATIO_1_1);
+        if (manager.poolCount() != 1) revert();
     }
 
-    function testSetProtocolFeeControllerFuzz(uint24 protocolFee) public {
+    function testSetProtocolFeeControllerFuzz(uint24 protocolFee) public {  
         (CLSlot0 slot0,,,) = manager.pools(key.toId());
         assertEq(slot0.protocolFee(), 0);
 

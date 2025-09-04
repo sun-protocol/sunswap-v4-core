@@ -51,7 +51,6 @@ contract Deployers {
             currency0,
             currency1,
             hooks,
-            manager,
             fee,
             fee.isDynamicLPFee()
                 ? bytes32(uint256((60 << 16) | 0x00ff))

@@ -36,7 +36,6 @@ contract CLHookRevertWithReasonTest is Test, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: hook,
-            poolManager: poolManager,
             fee: uint24(3000),
             parameters: bytes32(uint256(hook.getHooksRegistrationBitmap())).setTickSpacing(10)
         });

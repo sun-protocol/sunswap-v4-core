@@ -95,7 +95,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0xa0000))
             });
@@ -109,7 +108,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
                 fee: uint24(0),
                 parameters: bytes32(uint256(0xa0000))
             });
@@ -123,7 +121,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
                 fee: uint24(300000),
                 parameters: bytes32(uint256(0xa0000))
             });
@@ -137,7 +134,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
                 fee: uint24(1000000),
                 parameters: bytes32(uint256(0xa0000))
             });
@@ -151,7 +147,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
                 fee: uint24(1000001),
                 parameters: bytes32(uint256(0xa0000))
             });
@@ -168,7 +163,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0x0000))
             });
@@ -183,7 +177,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0x10000))
             });
@@ -197,7 +190,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0xa0000))
             });
@@ -211,7 +203,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0x7fff0000))
             });
@@ -225,7 +216,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
+
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0x80000000))
             });
@@ -242,7 +233,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
+
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0x18000010000))
             });
@@ -258,7 +249,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
+
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0x10000010000))
             });
@@ -273,7 +264,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
+
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0x20000010000))
             });
@@ -288,7 +279,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(address(0)),
-                poolManager: poolManager,
+
                 fee: uint24(3000),
                 parameters: bytes32(uint256(0x40000010000))
             });
@@ -307,7 +298,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(hookAddr),
-                poolManager: poolManager,
+
                 fee: uint24(3000),
                 // 0 ~ 15  hookRegistrationMap = 0x1
                 // 16 ~ 24 tickSpacing = 10
@@ -326,7 +317,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
                 currency0: Currency.wrap(makeAddr("token0")),
                 currency1: Currency.wrap(makeAddr("token1")),
                 hooks: IHooks(hookAddr),
-                poolManager: poolManager,
+
                 fee: uint24(3000),
                 // 0 ~ 15  hookRegistrationMap =
                 // 16 ~ 24 tickSpacing = 10
@@ -343,7 +334,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: Currency.wrap(makeAddr("token0")),
             currency1: Currency.wrap(makeAddr("token1")),
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 10
@@ -368,7 +358,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 10
@@ -385,7 +375,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
 
         // tested in Hooks.t.sol
         key.hooks = IHooks(address(0));
-        key.poolManager = poolManager;
 
         if (key.parameters.getTickSpacing() > TickMath.MAX_TICK_SPACING) {
             vm.expectRevert(
@@ -420,7 +409,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             int24 tick = TickMath.getTickAtSqrtRatio(sqrtPriceX96);
             vm.expectEmit(true, true, true, true);
             emit ICLPoolManager.Initialize(
-                key.toId(), key.currency0, key.currency1, key.hooks, key.fee, key.parameters, sqrtPriceX96, tick
+                key.toId(), key.currency0, key.currency1, key.hooks, key.fee, key.parameters, sqrtPriceX96, tick, 1
             );
             poolManager.initialize(key, sqrtPriceX96);
 
@@ -439,7 +428,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60 << 16))
         });
 
@@ -452,7 +441,8 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             key.fee,
             key.parameters,
             sqrtPriceX96,
-            TickMath.getTickAtSqrtRatio(sqrtPriceX96)
+            TickMath.getTickAtSqrtRatio(sqrtPriceX96),
+            1
         );
         poolManager.initialize(key, sqrtPriceX96);
 
@@ -472,7 +462,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(hookAddr),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256((60 << 16) | hookAddr.getHooksRegistrationBitmap()))
         });
 
@@ -491,12 +481,11 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
         (CLSlot0 slot0,,,) = poolManager.pools(key.toId());
         assertEq(slot0.sqrtPriceX96(), sqrtPriceX96);
 
-        (Currency curr0, Currency curr1, IHooks hooks, IPoolManager pm, uint24 fee, bytes32 parameters) =
+        (Currency curr0, Currency curr1, IHooks hooks, uint24 fee, bytes32 parameters) =
             poolManager.poolIdToPoolKey(key.toId());
         assertEq(Currency.unwrap(curr0), Currency.unwrap(key.currency0));
         assertEq(Currency.unwrap(curr1), Currency.unwrap(key.currency1));
         assertEq(address(hooks), address(key.hooks));
-        assertEq(address(pm), address(key.poolManager));
         assertEq(fee, key.fee);
         assertEq(parameters, key.parameters);
     }
@@ -510,7 +499,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(int256(TickMath.MAX_TICK_SPACING) << 16))
         });
 
@@ -523,7 +512,8 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             key.fee,
             key.parameters,
             sqrtPriceX96,
-            TickMath.getTickAtSqrtRatio(sqrtPriceX96)
+            TickMath.getTickAtSqrtRatio(sqrtPriceX96),
+            1
         );
 
         poolManager.initialize(key, sqrtPriceX96);
@@ -540,7 +530,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: hookEmptyAddr,
-            poolManager: poolManager,
+
             parameters: bytes32(uint256((60 << 16) | hookEmptyAddr.getHooksRegistrationBitmap()))
         });
 
@@ -559,7 +549,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency0,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60 << 16))
         });
 
@@ -578,7 +568,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60 << 16))
         });
 
@@ -587,7 +577,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency0,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60 << 16))
         });
 
@@ -611,7 +601,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60 << 16))
         });
 
@@ -628,7 +618,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: mockHooks,
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10 << 16) | mockHooks.getHooksRegistrationBitmap())
         });
 
@@ -653,7 +643,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: mockHooks,
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10 << 16) | mockHooks.getHooksRegistrationBitmap())
         });
 
@@ -672,7 +662,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256((int256((TickMath.MAX_TICK_SPACING)) + 1) << 16))
         });
 
@@ -691,7 +681,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(0))
         });
 
@@ -708,7 +698,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             // tickSpacing = -1
             parameters: bytes32(uint256(0xffffff) << 16)
         });
@@ -726,7 +716,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: LPFeeLibrary.DYNAMIC_FEE_FLAG,
             hooks: IHooks(address(clFeeManagerHook)),
-            poolManager: poolManager,
+
             parameters: CLPoolParametersHelper.setTickSpacing(
                 bytes32(uint256(clFeeManagerHook.getHooksRegistrationBitmap())), 10
             )
@@ -752,7 +742,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: LPFeeLibrary.DYNAMIC_FEE_FLAG + 1,
             hooks: IHooks(address(clFeeManagerHook)),
-            poolManager: poolManager,
+
             parameters: CLPoolParametersHelper.setTickSpacing(
                 bytes32(uint256(clFeeManagerHook.getHooksRegistrationBitmap())), 10
             )
@@ -778,7 +768,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -876,7 +866,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1003,7 +993,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1049,7 +1039,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1090,7 +1080,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1116,7 +1106,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1142,7 +1132,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1201,7 +1191,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1293,7 +1283,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
         vm.expectRevert();
@@ -1312,7 +1302,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -1336,7 +1326,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -1361,7 +1351,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(mockAddr),
-            poolManager: poolManager,
+
             parameters: bytes32((uint256(60) << 16) | mockAddr.getHooksRegistrationBitmap())
         });
 
@@ -1409,7 +1399,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(mockAddr),
-            poolManager: poolManager,
+
             parameters: bytes32((uint256(60) << 16) | mockAddr.getHooksRegistrationBitmap())
         });
 
@@ -1457,7 +1447,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(mockAddr),
-            poolManager: poolManager,
+
             parameters: bytes32((uint256(60) << 16) | mockAddr.getHooksRegistrationBitmap())
         });
 
@@ -1497,7 +1487,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: mockHooks,
-            poolManager: poolManager,
+
             parameters: bytes32((uint256(10) << 16) | mockHooks.getHooksRegistrationBitmap())
         });
 
@@ -1527,7 +1517,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: mockHooks,
-            poolManager: poolManager,
+
             parameters: bytes32((uint256(10) << 16) | mockHooks.getHooksRegistrationBitmap())
         });
 
@@ -1551,7 +1541,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -1574,7 +1564,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1663,7 +1653,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1767,7 +1757,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: uint24(3000),
             // 0 ~ 15  hookRegistrationMap = nil
             // 16 ~ 24 tickSpacing = 1
@@ -1818,7 +1808,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -1838,7 +1828,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -1873,7 +1863,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: LPFeeLibrary.DYNAMIC_FEE_FLAG, // 0.3%
             hooks: IHooks(address(clFeeManagerHook)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256((60 << 16) | clFeeManagerHook.getHooksRegistrationBitmap()))
         });
 
@@ -1907,7 +1897,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             // 0.3%
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -1957,7 +1947,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -1983,7 +1973,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(mockAddr),
-            poolManager: poolManager,
+
             parameters: bytes32((uint256(60) << 16) | mockAddr.getHooksRegistrationBitmap())
         });
 
@@ -2025,7 +2015,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: mockHooks,
-            poolManager: poolManager,
+
             parameters: bytes32((uint256(10) << 16) | mockHooks.getHooksRegistrationBitmap())
         });
 
@@ -2062,7 +2052,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: mockHooks,
-            poolManager: poolManager,
+
             parameters: bytes32((uint256(10) << 16) | mockHooks.getHooksRegistrationBitmap())
         });
 
@@ -2093,7 +2083,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -2129,7 +2119,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -2180,7 +2170,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -2206,7 +2196,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -2234,7 +2224,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: mockHooks,
-            poolManager: poolManager,
+
             parameters: bytes32((uint256(60) << 16) | mockHooks.getHooksRegistrationBitmap())
         });
 
@@ -2260,7 +2250,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -2292,7 +2282,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -2337,7 +2327,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -2373,7 +2363,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -2408,7 +2398,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10 << 16))
         });
         vm.expectRevert(abi.encodeWithSelector(CLPool.PoolNotInitialized.selector));
@@ -2423,7 +2413,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10 << 16))
         });
         poolManager.initialize(key, sqrtPriceX96);
@@ -2438,7 +2428,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10 << 16))
         });
         poolManager.initialize(key, SQRT_RATIO_1_1);
@@ -2460,7 +2450,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency0: CurrencyLibrary.NATIVE,
             currency1: currency1,
             fee: 100,
-            poolManager: poolManager,
+
             hooks: IHooks(address(0)),
             parameters: bytes32(uint256(10 << 16))
         });
@@ -2487,7 +2477,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: mockHooks,
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10 << 16) | impl.getHooksRegistrationBitmap())
         });
         poolManager.initialize(key, SQRT_RATIO_1_1);
@@ -2519,7 +2509,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: mockHooks,
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10 << 16) | impl.getHooksRegistrationBitmap())
         });
         poolManager.initialize(key, SQRT_RATIO_1_1);
@@ -2539,7 +2529,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10 << 16))
         });
         poolManager.initialize(key, SQRT_RATIO_1_1);
@@ -2561,7 +2551,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10 << 16))
         });
         poolManager.initialize(key, SQRT_RATIO_1_1);
@@ -2582,7 +2572,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency0Invalid ? currency0 : invalidCurrency,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(60) << 16)
         });
 
@@ -2610,7 +2600,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10) << 16)
         });
         poolManager.initialize(key, SQRT_RATIO_1_1);
@@ -2626,7 +2616,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10) << 16)
         });
         poolManager.initialize(key, SQRT_RATIO_1_1);
@@ -2644,7 +2634,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10) << 16)
         });
         poolManager.initialize(key, SQRT_RATIO_1_1);
@@ -2667,7 +2657,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 100,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10) << 16)
         });
         poolManager.setProtocolFeeController(IProtocolFeeController(address(feeController)));
@@ -2689,7 +2679,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
             parameters: bytes32(uint256(10) << 16)
         });
         poolManager.setProtocolFeeController(IProtocolFeeController(address(feeController)));
@@ -2730,7 +2719,6 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
             parameters: bytes32(uint256(10) << 16)
         });
         poolManager.setProtocolFeeController(IProtocolFeeController(address(feeController)));
@@ -2771,7 +2759,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10) << 16)
         });
         poolManager.setProtocolFeeController(IProtocolFeeController(address(feeController)));
@@ -2806,7 +2794,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: LPFeeLibrary.DYNAMIC_FEE_FLAG,
             hooks: IHooks(address(clFeeManagerHook)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10) << 16)
         });
 
@@ -2825,7 +2813,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: uint24(3000), // 3000 = 0.3%
             hooks: IHooks(address(clFeeManagerHook)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256(10) << 16)
         });
 
@@ -2844,7 +2832,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: LPFeeLibrary.DYNAMIC_FEE_FLAG,
             hooks: IHooks(address(clFeeManagerHook)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256((10 << 16) | clFeeManagerHook.getHooksRegistrationBitmap()))
         });
 
@@ -2873,7 +2861,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: LPFeeLibrary.DYNAMIC_FEE_FLAG,
             hooks: IHooks(address(clFeeManagerHook)),
-            poolManager: poolManager,
+
             parameters: bytes32(uint256((10 << 16) | clFeeManagerHook.getHooksRegistrationBitmap()))
         });
 
@@ -2892,118 +2880,118 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
         assertEq(swapFee, _swapFee);
     }
 
-    function testModifyLiquidity_Add_WhenPaused() public {
-        PoolKey memory key = PoolKey({
-            currency0: currency0,
-            currency1: currency1,
-            hooks: IHooks(address(0)),
-            poolManager: poolManager,
-            fee: uint24(3000),
-            parameters: bytes32(uint256(0x10000))
-        });
+    // function testModifyLiquidity_Add_WhenPaused() public {
+    //     PoolKey memory key = PoolKey({
+    //         currency0: currency0,
+    //         currency1: currency1,
+    //         hooks: IHooks(address(0)),
+    //         poolManager: poolManager,
+    //         fee: uint24(3000),
+    //         parameters: bytes32(uint256(0x10000))
+    //     });
 
-        poolManager.initialize(key, SQRT_RATIO_1_1);
-        IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
-        IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
+    //     poolManager.initialize(key, SQRT_RATIO_1_1);
+    //     IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
+    //     IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
 
-        // pause
-        poolManager.pause();
+    //     // pause
+    //     poolManager.pause();
 
-        vm.expectRevert(ICLPoolManager.PoolPaused.selector);
-        router.modifyPosition(
-            key,
-            ICLPoolManager.ModifyLiquidityParams({
-                tickLower: TickMath.MIN_TICK,
-                tickUpper: TickMath.MAX_TICK,
-                liquidityDelta: 1e24,
-                salt: 0
-            }),
-            ""
-        );
-    }
+    //     vm.expectRevert(ICLPoolManager.PoolPaused.selector);
+    //     router.modifyPosition(
+    //         key,
+    //         ICLPoolManager.ModifyLiquidityParams({
+    //             tickLower: TickMath.MIN_TICK,
+    //             tickUpper: TickMath.MAX_TICK,
+    //             liquidityDelta: 1e24,
+    //             salt: 0
+    //         }),
+    //         ""
+    //     );
+    // }
 
-    function testModifyLiquidity_Remove_WhenPaused() public {
-        // make sure enough balance for the test
-        MockERC20(Currency.unwrap(currency0)).mint(address(this), 1e30 ether);
-        MockERC20(Currency.unwrap(currency1)).mint(address(this), 1e30 ether);
-        PoolKey memory key = PoolKey({
-            currency0: currency0,
-            currency1: currency1,
-            hooks: IHooks(address(0)),
-            poolManager: poolManager,
-            fee: uint24(3000),
-            parameters: bytes32(uint256(0x10000))
-        });
+    // function testModifyLiquidity_Remove_WhenPaused() public {
+    //     // make sure enough balance for the test
+    //     MockERC20(Currency.unwrap(currency0)).mint(address(this), 1e30 ether);
+    //     MockERC20(Currency.unwrap(currency1)).mint(address(this), 1e30 ether);
+    //     PoolKey memory key = PoolKey({
+    //         currency0: currency0,
+    //         currency1: currency1,
+    //         hooks: IHooks(address(0)),
+    //         poolManager: poolManager,
+    //         fee: uint24(3000),
+    //         parameters: bytes32(uint256(0x10000))
+    //     });
 
-        poolManager.initialize(key, SQRT_RATIO_1_1);
-        IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
-        IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
+    //     poolManager.initialize(key, SQRT_RATIO_1_1);
+    //     IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
+    //     IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
 
-        // pre-req add liquidity
-        router.modifyPosition(
-            key,
-            ICLPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: 1e24, salt: 0}),
-            ""
-        );
+    //     // pre-req add liquidity
+    //     router.modifyPosition(
+    //         key,
+    //         ICLPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: 1e24, salt: 0}),
+    //         ""
+    //     );
 
-        // pause
-        poolManager.pause();
+    //     // pause
+    //     poolManager.pause();
 
-        // verify no revert
-        router.modifyPosition(
-            key,
-            ICLPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: -1e24, salt: 0}),
-            ""
-        );
-    }
+    //     // verify no revert
+    //     router.modifyPosition(
+    //         key,
+    //         ICLPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: -1e24, salt: 0}),
+    //         ""
+    //     );
+    // }
 
-    function testSwap_WhenPaused() public {
-        PoolKey memory key = PoolKey({
-            currency0: currency0,
-            currency1: currency1,
-            hooks: IHooks(address(0)),
-            poolManager: poolManager,
-            fee: uint24(3000),
-            parameters: bytes32(uint256(0x10000))
-        });
+    // function testSwap_WhenPaused() public {
+    //     PoolKey memory key = PoolKey({
+    //         currency0: currency0,
+    //         currency1: currency1,
+    //         hooks: IHooks(address(0)),
+    //         poolManager: poolManager,
+    //         fee: uint24(3000),
+    //         parameters: bytes32(uint256(0x10000))
+    //     });
 
-        poolManager.initialize(key, SQRT_RATIO_1_1);
-        IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
-        IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
+    //     poolManager.initialize(key, SQRT_RATIO_1_1);
+    //     IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
+    //     IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
 
-        // pause
-        poolManager.pause();
+    //     // pause
+    //     poolManager.pause();
 
-        vm.expectRevert(Pausable.EnforcedPause.selector);
-        router.swap(
-            key,
-            ICLPoolManager.SwapParams({
-                zeroForOne: true,
-                amountSpecified: 0.1 ether,
-                sqrtPriceLimitX96: TickMath.MIN_SQRT_RATIO + 1
-            }),
-            CLPoolManagerRouter.SwapTestSettings({withdrawTokens: true, settleUsingTransfer: true}),
-            ""
-        );
-    }
+    //     vm.expectRevert(Pausable.EnforcedPause.selector);
+    //     router.swap(
+    //         key,
+    //         ICLPoolManager.SwapParams({
+    //             zeroForOne: true,
+    //             amountSpecified: 0.1 ether,
+    //             sqrtPriceLimitX96: TickMath.MIN_SQRT_RATIO + 1
+    //         }),
+    //         CLPoolManagerRouter.SwapTestSettings({withdrawTokens: true, settleUsingTransfer: true}),
+    //         ""
+    //     );
+    // }
 
-    function testDonate_WhenPaused() public {
-        PoolKey memory key = PoolKey({
-            currency0: currency0,
-            currency1: currency1,
-            fee: 100,
-            hooks: IHooks(address(0)),
-            poolManager: poolManager,
-            parameters: bytes32(uint256(10 << 16))
-        });
-        poolManager.initialize(key, SQRT_RATIO_1_1);
+    // function testDonate_WhenPaused() public {
+    //     PoolKey memory key = PoolKey({
+    //         currency0: currency0,
+    //         currency1: currency1,
+    //         fee: 100,
+    //         hooks: IHooks(address(0)),
+    //         poolManager: poolManager,
+    //         parameters: bytes32(uint256(10 << 16))
+    //     });
+    //     poolManager.initialize(key, SQRT_RATIO_1_1);
 
-        // pause
-        poolManager.pause();
+    //     // pause
+    //     poolManager.pause();
 
-        vm.expectRevert(Pausable.EnforcedPause.selector);
-        router.donate(key, 100, 200, ZERO_BYTES);
-    }
+    //     vm.expectRevert(Pausable.EnforcedPause.selector);
+    //     router.donate(key, 100, 200, ZERO_BYTES);
+    // }
 
     function checkUnusedBitsAllZero(bytes32 params) internal pure returns (bool) {
         return

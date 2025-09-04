@@ -18,13 +18,13 @@ import {IVault} from "../src/interfaces/IVault.sol";
 import {CLPoolManagerRouter} from "./helpers/CLPoolManagerRouter.sol";
 import {CLPoolParametersHelper} from "../src/libraries/CLPoolParametersHelper.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {PoolManager} from "../src/PoolManager.sol";
 
 abstract contract V3Fuzzer is V3Helper, Deployers, Fuzzers, IUniswapV3MintCallback, IUniswapV3SwapCallback {
     using CurrencyLibrary for Currency;
     using CLPoolParametersHelper for bytes32;
 
-    IVault vault;
-    ICLPoolManager manager;
+    PoolManager manager;
     CLPoolManagerRouter router;
 
     Currency currency0;
@@ -32,8 +32,8 @@ abstract contract V3Fuzzer is V3Helper, Deployers, Fuzzers, IUniswapV3MintCallba
 
     function setUp() public virtual override {
         super.setUp();
-        (vault, manager) = createFreshManager();
-        router = new CLPoolManagerRouter(vault, manager);
+        manager= createFreshManager();
+        router = new CLPoolManagerRouter(manager, manager);
 
         (currency0, currency1) = deployCurrencies(2 ** 255);
         // ensure router has enough allowance to move tokens, required for infinity
@@ -62,7 +62,6 @@ abstract contract V3Fuzzer is V3Helper, Deployers, Fuzzers, IUniswapV3MintCallba
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: manager,
             fee: fee,
             parameters: bytes32(0).setTickSpacing(tickSpacing)
         });

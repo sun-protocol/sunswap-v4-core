@@ -25,8 +25,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract CLHookReturnsFeeTest is Test, Deployers, TokenFixture {
     using LPFeeLibrary for uint24;
 
-    IVault vault;
-    ICLPoolManager poolManager;
+    PoolManager poolManager;
     CLDynamicReturnsFeeHook dynamicReturnsFeesHook;
     CLPoolManagerRouter router;
 
@@ -46,16 +45,15 @@ contract CLHookReturnsFeeTest is Test, Deployers, TokenFixture {
     function setUp() public {
         dynamicReturnsFeesHook = new CLDynamicReturnsFeeHook();
 
-        (vault, poolManager) = createFreshManager();
+        poolManager= createFreshManager();
         dynamicReturnsFeesHook.setManager(poolManager);
-        router = new CLPoolManagerRouter(vault, poolManager);
+        router = new CLPoolManagerRouter(poolManager, poolManager);
 
         initializeTokens();
         key = PoolKey({
             currency0: currency0,
             currency1: currency1,
             hooks: dynamicReturnsFeesHook,
-            poolManager: poolManager,
             fee: LPFeeLibrary.DYNAMIC_FEE_FLAG,
             parameters: CLPoolParametersHelper.setTickSpacing(
                 bytes32(uint256(dynamicReturnsFeesHook.getHooksRegistrationBitmap())), 1

@@ -21,8 +21,7 @@ import {IHooks} from "../../../src/interfaces/IHooks.sol";
 import {Hooks} from "../../../src/libraries/Hooks.sol";
 
 contract CLPoolSwapFeeTest is Deployers, TokenFixture, Test {
-    Vault vault;
-    CLPoolManager poolManager;
+    PoolManager poolManager;
     CLPoolManagerRouter router;
 
     CLFeeManagerHook hook;
@@ -32,9 +31,9 @@ contract CLPoolSwapFeeTest is Deployers, TokenFixture, Test {
     function setUp() public {
         initializeTokens();
 
-        (vault, poolManager) = createFreshManager();
+        poolManager = createFreshManager();
 
-        router = new CLPoolManagerRouter(vault, poolManager);
+        router = new CLPoolManagerRouter(poolManager, poolManager);
         IERC20(Currency.unwrap(currency0)).approve(address(router), 10 ether);
         IERC20(Currency.unwrap(currency1)).approve(address(router), 10 ether);
 
@@ -45,7 +44,7 @@ contract CLPoolSwapFeeTest is Deployers, TokenFixture, Test {
             currency0: currency0,
             currency1: currency1,
             hooks: hook,
-            poolManager: poolManager,
+
             fee: LPFeeLibrary.DYNAMIC_FEE_FLAG,
             parameters: CLPoolParametersHelper.setTickSpacing(bytes32(uint256(hook.getHooksRegistrationBitmap())), 1)
         });
@@ -55,7 +54,7 @@ contract CLPoolSwapFeeTest is Deployers, TokenFixture, Test {
             currency0: currency0,
             currency1: currency1,
             hooks: hook,
-            poolManager: poolManager,
+
             // 50%
             fee: LPFeeLibrary.ONE_HUNDRED_PERCENT_FEE / 2,
             parameters: CLPoolParametersHelper.setTickSpacing(bytes32(uint256(hook.getHooksRegistrationBitmap())), 1)
@@ -176,7 +175,7 @@ contract CLPoolSwapFeeTest is Deployers, TokenFixture, Test {
             currency0: currency0,
             currency1: currency1,
             hooks: IHooks(address(0)),
-            poolManager: poolManager,
+
             fee: LPFeeLibrary.DYNAMIC_FEE_FLAG,
             parameters: CLPoolParametersHelper.setTickSpacing(bytes32(uint256(hook.getHooksRegistrationBitmap())), 1)
         });
