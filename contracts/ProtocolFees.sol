@@ -9,8 +9,8 @@ import {IProtocolFees} from "./interfaces/IProtocolFees.sol";
 import {ProtocolFeeLibrary} from "./libraries/ProtocolFeeLibrary.sol";
 import {PoolKey} from "./types/PoolKey.sol";
 import {PoolId} from "./types/PoolId.sol";
-import {IVault} from "./interfaces/IVault.sol";
 import {CustomRevert} from "./libraries/CustomRevert.sol";
+import {VaultReserve} from "./libraries/VaultReserve.sol";
 
 abstract contract ProtocolFees is IProtocolFees, Ownable {
     using ProtocolFeeLibrary for uint24;
@@ -21,8 +21,6 @@ abstract contract ProtocolFees is IProtocolFees, Ownable {
     /// @inheritdoc IProtocolFees
     IProtocolFeeController public protocolFeeController;
 
-    /// @inheritdoc IProtocolFees
-    IVault public immutable vault;
 
     constructor(address InitialOwner) Ownable(InitialOwner) {}
 
@@ -86,9 +84,11 @@ abstract contract ProtocolFees is IProtocolFees, Ownable {
         returns (uint256 amountCollected)
     {
         if (msg.sender != address(protocolFeeController)) revert InvalidCaller();
-
+        (Currency syncedCurrency,) = VaultReserve.getVaultReserve();
+        if (!currency.isNative() && syncedCurrency == currency) revert
+        FeeCurrencySynced();
         amountCollected = (amount == 0) ? protocolFeesAccrued[currency] : amount;
         protocolFeesAccrued[currency] -= amountCollected;
-        vault.collectFee(currency, amountCollected, recipient);
+        currency.transfer(recipient, amountCollected);
     }
 }

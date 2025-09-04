@@ -101,7 +101,6 @@ contract ProtocolFeeController is IProtocolFeeController, Ownable2Step {
 
     /// @inheritdoc IProtocolFeeController
     function protocolFeeForPool(PoolKey memory poolKey) external view override returns (uint24 protocolFee) {
-        if (address(poolKey.poolManager) != poolManager) revert InvalidPoolManager();
 
         // calculate the protocol fee based on the predefined rule
         uint256 lpFee = poolKey.fee;
@@ -142,10 +141,9 @@ contract ProtocolFeeController is IProtocolFeeController, Ownable2Step {
     /// @dev this could be used for marketing campaign where PCS takes 0 protocol fee for a pool for a period
     /// @param newProtocolFee 1000 = 0.1%, and max at 4000 = 0.4%. If set at 0.1%, this means 0.1% of amountIn for each swap will go to protocol
     function setProtocolFee(PoolKey memory key, uint24 newProtocolFee) external onlyOwner {
-        if (address(key.poolManager) != poolManager) revert InvalidPoolManager();
 
         // no need to validate the protocol fee as it will be done in the pool manager
-        IProtocolFees(address(key.poolManager)).setProtocolFee(key, newProtocolFee);
+        IProtocolFees(address(poolManager)).setProtocolFee(key, newProtocolFee);
     }
 
     /// @notice Collect the protocol fee from the pool manager

@@ -27,9 +27,6 @@ interface IVault is IVaultToken {
     /// @notice Thrown when there is no locker
     error NoLocker();
 
-    /// @notice Thrown when collectFee is attempted on a token that is synced.
-    error FeeCurrencySynced();
-
     /// @notice Returns the locker who is locking the vault
     function getLocker() external view returns (address locker);
 
@@ -75,9 +72,9 @@ interface IVault is IVaultToken {
     /// Additionally, the amount must be the exact positive balance. This is to enforce that the caller is aware of the amount being cleared.
     function clear(Currency currency, uint256 amount) external;
 
-    /// @notice Called by app to collect any fee related
-    /// @dev no restriction on caller, underflow happen if caller collect more than the reserve
-    function collectFee(Currency currency, uint256 amount, address recipient) external;
+    // /// @notice Called by app to collect any fee related
+    // /// @dev no restriction on caller, underflow happen if caller collect more than the reserve
+    // function collectFee(Currency currency, uint256 amount, address recipient) external;
 
     /// @notice Called by the user to store surplus tokens in the vault
     function mint(address to, Currency currency, uint256 amount) external;

@@ -158,7 +158,7 @@ contract CLProtocolFeesTest is Test, Deployers, TokenFixture {
 
         uint256 expectedProtocolFees = 1000000 * 0.004;
         vm.prank(address(protocolFeeController));
-        manager.collectProtocolFees(address(protocolFeeController), currency1, 0);
+        manager.collectProtocolFees(address(protocolFeeController), currency1, expectedProtocolFees);
         assertEq(currency1.balanceOf(address(protocolFeeController)), expectedProtocolFees);
     }
 

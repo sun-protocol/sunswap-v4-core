@@ -36,7 +36,6 @@ interface IPoolManager {
             Currency currency0,
             Currency currency1,
             IHooks hooks,
-            IPoolManager poolManager,
             uint24 fee,
             bytes32 parameters
         );

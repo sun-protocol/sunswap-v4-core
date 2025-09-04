@@ -8,6 +8,10 @@ import {PoolKey} from "../types/PoolKey.sol";
 import {IVault} from "./IVault.sol";
 
 interface IProtocolFees {
+
+    /// @notice Thrown when collectFee is attempted on a token that is synced.
+    error FeeCurrencySynced();
+
     /// @notice Thrown when the protocol fee exceeds the upper limit.
     error ProtocolFeeTooLarge(uint24 fee);
     /// @notice Thrown when calls to protocolFeeController fails or return size is not 32 bytes
@@ -53,8 +57,4 @@ interface IProtocolFees {
     function collectProtocolFees(address recipient, Currency currency, uint256 amount)
         external
         returns (uint256 amountCollected);
-
-    /// @notice Returns the vault where the protocol fees are safely stored
-    /// @return IVault The address of the vault
-    function vault() external view returns (IVault);
 }

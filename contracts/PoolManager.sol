@@ -251,13 +251,13 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         _burnFrom(from, currency, amount);
     }
 
-    /// @inheritdoc IVault
-    function collectFee(Currency currency, uint256 amount, address recipient) external  {
-        // prevent transfer between the sync and settle balanceOfs (native settle uses msg.value)
-        (Currency syncedCurrency,) = VaultReserve.getVaultReserve();
-        if (!currency.isNative() && syncedCurrency == currency) revert FeeCurrencySynced();
-        currency.transfer(recipient, amount);
-    }
+    // /// @inheritdoc IVault
+    // function collectFee(Currency currency, uint256 amount, address recipient) external  {
+    //     // prevent transfer between the sync and settle balanceOfs (native settle uses msg.value)
+    //     (Currency syncedCurrency,) = VaultReserve.getVaultReserve();
+    //     if (!currency.isNative() && syncedCurrency == currency) revert FeeCurrencySynced();
+    //     currency.transfer(recipient, amount);
+    // }
 
 
 
