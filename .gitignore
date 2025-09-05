@@ -11,7 +11,7 @@ out/
 cache_forge/
 lib/
 pnpm-lock.yaml
-
+snapshots/
 # Ignores development broadcast logs
 !/broadcast
 /broadcast/*
