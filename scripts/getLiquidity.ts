@@ -8,7 +8,7 @@ export const getSlot0 = async (poolKey: string | PoolKey<'CL'>) => {
   }
 
   // "getSlot0", "bytes32", "uint160,int24,uint24,uint24"
-  const functionSelector = 'getSlot0(bytes32) '
+  const functionSelector = 'getLiquidity(bytes32) '
   const parameter = [
     {
       type: 'bytes32',

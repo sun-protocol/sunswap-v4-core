@@ -20,7 +20,14 @@ import {
   maxLiquidityForAmount1,
   maxLiquidityForAmounts,
 } from '@pancakeswap/v3-sdk'
-import { TRX_ADDRESS, SUN_ADDRESS, POSITION_MANAGER_ADDRESS, POOL_MANAGER_ADDRESS } from './address'
+import {
+  TRX_ADDRESS,
+  SUN_ADDRESS,
+  POSITION_MANAGER_ADDRESS,
+  POOL_MANAGER_ADDRESS,
+  USDC_ADDRESS,
+  WIN_ADDRESS,
+} from './address'
 import {
   getEvmAccount,
   toEvmHex,
@@ -31,24 +38,40 @@ import {
   DEFAULT_TICK_SPACING,
   DEFAULT_FEE,
   parseConstantResult,
+  DEFAULT_FEE_2,
+  DEFAULT_TICK_SPACING_2,
+  getPoolCandidatesByTokens,
 } from './context'
 
 import { getSlot0 } from './getSlot0'
+import { PoolCandidate } from './types'
+import { getPositionCount } from './getPositionCount'
 
 // Usage in your test script
-export const testMintPosition = async () => {
+export const mintPosition = async (
+  poolCandidate: PoolCandidate,
+  token0Amount: number,
+  token1Amount: number,
+  tickLower?: number,
+  tickUpper?: number
+): Promise<bigint> => {
   const account = getEvmAccount()
 
-  let token0 = TRX_ADDRESS
+  let token0 = poolCandidate.token0
   let token0Evm = toEvmHex(token0)
-  let token0Decimals = 6
-  let token0Amount = 100n
-  let token1 = SUN_ADDRESS
+  let token0Decimals = poolCandidate.decimals0
+
+  let token1 = poolCandidate.token1
   let token1Evm = toEvmHex(token1)
-  let token1Decimals = 18
-  let token1Amount = 100n
-  let tickLower = TickMath.MIN_TICK
-  let tickUpper = TickMath.MAX_TICK
+  let token1Decimals = poolCandidate.decimals1
+  if (!tickLower) {
+    tickLower = TickMath.MIN_TICK
+  }
+  if (!tickUpper) {
+    tickUpper = TickMath.MAX_TICK
+  }
+  const fee = poolCandidate.fee
+  const tickSpacing = poolCandidate.tickSpacing
 
   if (token0Evm.toLowerCase() >= token1Evm.toLowerCase()) {
     ;[token0, token1] = [token1, token0]
@@ -57,8 +80,8 @@ export const testMintPosition = async () => {
     ;[token0Decimals, token1Decimals] = [token1Decimals, token0Decimals]
   }
 
-  tickLower = alignToSpacing(tickLower, DEFAULT_TICK_SPACING)
-  tickUpper = alignToSpacing(tickUpper, DEFAULT_TICK_SPACING)
+  tickLower = alignToSpacing(tickLower, tickSpacing)
+  tickUpper = alignToSpacing(tickUpper, tickSpacing)
 
   const amount0 = toRawAmount(token0Amount.toString(), token0Decimals)
   const amount1 = toRawAmount(token1Amount.toString(), token1Decimals)
@@ -84,8 +107,8 @@ export const testMintPosition = async () => {
         currency1: token1Evm as `0x${string}`,
         hooks: ZERO_HEX_ADDRESS,
         poolManager: toEvmHex(POOL_MANAGER_ADDRESS) as `0x${string}`,
-        fee: Number(DEFAULT_FEE),
-        parameters: { tickSpacing: DEFAULT_TICK_SPACING },
+        fee: Number(fee),
+        parameters: { tickSpacing: tickSpacing },
       })
     ).sqrtPriceX96
 
@@ -123,9 +146,9 @@ export const testMintPosition = async () => {
           currency1: token1Evm,
           hooks: ZERO_HEX_ADDRESS,
           poolManager: toEvmHex(POOL_MANAGER_ADDRESS) as `0x${string}`,
-          fee: DEFAULT_FEE,
+          fee: fee,
           parameters: {
-            tickSpacing: DEFAULT_TICK_SPACING,
+            tickSpacing: tickSpacing,
           },
           /* your pool key */
         },
@@ -208,8 +231,16 @@ export const testMintPosition = async () => {
     console.log('Transaction broadcasted!')
     console.log('TxID:', result.txid)
     console.log('Result:', result)
+
+    // sleep 5 seconds
+    await new Promise((resolve) => setTimeout(resolve, 5000))
+
+    const tokenId = await getPositionCount()
+
+    return tokenId
   } catch (error) {
     console.error('Error:', error)
+    return 0n
   }
 }
 
@@ -233,7 +264,7 @@ async function transfer(tokenAddr: string, amount: string, to: string) {
   await new Promise((resolve) => setTimeout(resolve, 5000))
 }
 
-export const addCLLiquidityMulticall = ({
+const addCLLiquidityMulticall = ({
   isInitialized,
   sqrtPriceX96,
   tokenId,
@@ -362,6 +393,9 @@ export const encodeCLPositionManagerMintCalldata = (
   if (encodedPositionConfig.poolKey.currency0 === ZERO_HEX_ADDRESS) {
     planner.add(ACTIONS.SWEEP, [encodedPositionConfig.poolKey.currency0, recipient])
   }
+  if (encodedPositionConfig.poolKey.currency1 === ZERO_HEX_ADDRESS) {
+    planner.add(ACTIONS.SWEEP, [encodedPositionConfig.poolKey.currency1, recipient])
+  }
   const calls = planner.encode()
 
   return encodeFunctionData({
@@ -372,8 +406,13 @@ export const encodeCLPositionManagerMintCalldata = (
 }
 
 if (require.main === module) {
-  testMintPosition().catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
+  const poolCandidate = getPoolCandidatesByTokens(TRX_ADDRESS, SUN_ADDRESS)[0]
+  mintPosition(poolCandidate, 1000, 1000)
+    .then((tokenId) => {
+      console.log('tokenId', tokenId)
+    })
+    .catch((e) => {
+      console.error(e)
+      process.exit(1)
+    })
 }

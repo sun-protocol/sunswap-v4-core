@@ -1,18 +1,3 @@
-/*
-    function positions(uint256 tokenId)
-        external
-        view
-        returns (
-            PoolKey memory poolKey,
-            int24 tickLower,
-            int24 tickUpper,
-            uint128 liquidity,
-            uint256 feeGrowthInside0LastX128,
-            uint256 feeGrowthInside1LastX128,
-            ICLSubscriber _subscriber
-        )
-    {
-        */
 import { tronWeb, parseConstantResult, DEFAULT_TICK_SPACING, DEFAULT_FEE, ZERO_HEX_ADDRESS, toEvmHex } from './context'
 import { POSITION_MANAGER_ADDRESS, TRX_ADDRESS, SUN_ADDRESS } from './address'
 

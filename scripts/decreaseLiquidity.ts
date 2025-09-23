@@ -1,23 +1,32 @@
 import { encodeCLPositionManagerDecreaseLiquidityCalldata } from '@pancakeswap/infinity-sdk'
 
-import { TRX_ADDRESS, SUN_ADDRESS, POSITION_MANAGER_ADDRESS, POOL_MANAGER_ADDRESS } from './address'
-import { tronWeb, toEvmHex, DEFAULT_TICK_SPACING, ZERO_HEX_ADDRESS, getEvmAccount, DEFAULT_FEE } from './context'
+import { TRX_ADDRESS, SUN_ADDRESS, POSITION_MANAGER_ADDRESS, POOL_MANAGER_ADDRESS, USDC_ADDRESS } from './address'
+import {
+  tronWeb,
+  toEvmHex,
+  DEFAULT_TICK_SPACING,
+  ZERO_HEX_ADDRESS,
+  getEvmAccount,
+  DEFAULT_FEE,
+  getPoolCandidatesByTokens,
+} from './context'
 import { getPosition } from './getPosition'
+import { PoolCandidate } from './types'
 
 // Usage in your test script
-export const testDecreaseLiquidity = async () => {
+export const decreaseLiquidity = async (poolCandidate: PoolCandidate, tokenId: bigint, liquidity?: bigint) => {
   const account = getEvmAccount()
 
-  let token0 = TRX_ADDRESS
-  let token1 = SUN_ADDRESS
-  let token0Evm = toEvmHex(token0)
-  let token1Evm = toEvmHex(token1)
-  let tokenId = 17n
-  let liquidity = 0n
+  let token0 = poolCandidate.token0
+  let token1 = poolCandidate.token1
+  let token0Evm = poolCandidate.token0Evm
+  let token1Evm = poolCandidate.token1Evm
 
   const position = await getPosition(tokenId)
 
-  liquidity = liquidity == 0n ? position.liquidity : liquidity
+  if (!liquidity) {
+    liquidity = position.liquidity
+  }
 
   if (token0Evm.toLowerCase() >= token1Evm.toLowerCase()) {
     ;[token0, token1] = [token1, token0]
@@ -39,7 +48,7 @@ export const testDecreaseLiquidity = async () => {
           tickSpacing: DEFAULT_TICK_SPACING,
         },
       },
-      liquidity: liquidity,
+      liquidity: liquidity as bigint,
       amount0Min: 0n,
       amount1Min: 0n,
       recipient: account.address,
@@ -84,7 +93,8 @@ export const testDecreaseLiquidity = async () => {
 }
 
 if (require.main === module) {
-  testDecreaseLiquidity().catch((e) => {
+  const poolCandidate = getPoolCandidatesByTokens(TRX_ADDRESS, SUN_ADDRESS)[0]
+  decreaseLiquidity(poolCandidate, 1n).catch((e) => {
     console.error(e)
     process.exit(1)
   })

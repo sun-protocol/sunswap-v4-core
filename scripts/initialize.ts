@@ -1,7 +1,5 @@
 // TronWeb PoolManager Initialize Testing Script
 // Install dependencies: npm install --save-dev tronweb @types/node ts-node --legacy-peer-deps
-import { TronWeb, utils as TronWebUtils } from 'tronweb'
-import * as dotenv from 'dotenv'
 import {
   POOL_MANAGER_ADDRESS,
   TRX_ADDRESS,
@@ -11,6 +9,7 @@ import {
   TUSD_ADDRESS,
   USDJ_ADDRESS,
   SUN_ADDRESS,
+  WIN_ADDRESS,
 } from './address'
 // import { poolManagerAbi } from './abi/pool_manager_abi'
 import {
@@ -18,43 +17,8 @@ import {
   encodeSqrtPriceX96WithoutDecimals,
   sqrtPriceX96ToRealPriceWithoutDecimals,
 } from './math/sqrtPriceX96'
-
-// Load environment variables
-dotenv.config()
-
-// Interface definitions for better type safety
-interface PoolKey {
-  currency0: string
-  currency1: string
-  hooks: string
-  poolManager: string
-  fee: number
-  parameters: string
-}
-
-// Initialize TronWeb instance
-const tronWeb = new TronWeb(
-  'https://nile.trongrid.io',
-  'https://nile.trongrid.io',
-  'https://nile.trongrid.io',
-  process.env.PRIVATE_KEY
-)
-
-// Get token addresses from environment
-const TOKEN0 = TRX_ADDRESS // TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
-const TOKEN0_DECIMALS = 6
-const TOKEN0_AMOUNT = 100
-const TOKEN1 = SUN_ADDRESS
-const TOKEN1_DECIMALS = 18
-const TOKEN1_AMOUNT = 514071
-
-// Helper function to encode parameters with tick spacing
-function encodeParameters(tickSpacing: number): string {
-  // Based on CLPoolParametersHelper: tickSpacing is stored at bits 16-39
-  // tickSpacing 1 = 0x10000, tickSpacing 10 = 0xa0000, etc.
-  const shifted = tickSpacing << 16
-  return '0x' + shifted.toString(16).padStart(64, '0')
-}
+import { tronWeb, DEFAULT_FEE_2, DEFAULT_TICK_SPACING_2, encodeParameters, getPoolCandidatesByTokens } from './context'
+import { PoolCandidate, PoolKey } from './types'
 
 // Helper function to create pool key
 function createPoolKey(
@@ -80,34 +44,20 @@ function createPoolKey(
   }
 }
 
-async function testInitialize(): Promise<void> {
+async function initialize(poolCandidate: PoolCandidate, token0Amount: bigint, token1Amount: bigint): Promise<void> {
   try {
     console.log('🚀 Starting PoolManager initialize test on Nile testnet...')
     console.log('📍 Contract Address:', POOL_MANAGER_ADDRESS)
 
-    // Pool configuration
-    const hooks = '0x0000000000000000000000000000000000000000' // No hooks
-    const fee = 500 // 0.05%
-    const tickSpacing = 10 // Common tick spacing for 0.05% fee pools
-
-    let token0 = TOKEN0
-    let token0Decimals = TOKEN0_DECIMALS
-    let token0Amount = TOKEN0_AMOUNT
-
-    let token1 = TOKEN1
-    let token1Decimals = TOKEN1_DECIMALS
-    let token1Amount = TOKEN1_AMOUNT
-    if (token0.toLowerCase() >= token1.toLowerCase()) {
-      token0 = TOKEN1
-      token1 = TOKEN0
-      token0Decimals = TOKEN1_DECIMALS
-      token1Decimals = TOKEN0_DECIMALS
-      token0Amount = TOKEN1_AMOUNT
-      token1Amount = TOKEN0_AMOUNT
-    }
-
+    let token0 = poolCandidate.token0
+    let token1 = poolCandidate.token1
+    let token0Decimals = poolCandidate.decimals0
+    let token1Decimals = poolCandidate.decimals1
+    let hooks = poolCandidate.hook
+    let fee = poolCandidate.fee
+    let tickSpacing = poolCandidate.tickSpacing
     // Create pool key
-    const poolKey = createPoolKey(TOKEN0, TOKEN1, hooks, POOL_MANAGER_ADDRESS, fee, tickSpacing)
+    const poolKey = createPoolKey(token0, token1, hooks, POOL_MANAGER_ADDRESS, Number(fee), tickSpacing)
 
     console.log('📋 Pool Key:', {
       currency0: poolKey.currency0,
@@ -248,69 +198,14 @@ async function checkPoolCount(): Promise<void> {
   }
 }
 
-// Helper function to calculate pool ID using simple hash
-async function calculatePoolId(poolKey: PoolKey): Promise<string> {
-  try {
-    // Create a simple deterministic ID
-    const concatenated =
-      poolKey.currency0 + poolKey.currency1 + poolKey.hooks + poolKey.poolManager + poolKey.fee + poolKey.parameters
-    const hash = tronWeb.utils.ethersUtils.sha256(tronWeb.toHex(concatenated))
-    return hash
-  } catch (error: any) {
-    console.error('❌ Failed to calculate pool ID:', error.message)
-    return ''
-  }
-}
-
-// Additional test functions
-async function testGetSlot0(poolId: string): Promise<any> {
-  try {
-    console.log('🎯 Getting pool slot0 information...')
-
-    const functionSelector = 'getSlot0(bytes32)'
-    const parameter = [{ type: 'bytes32', value: poolId }]
-
-    const result = await tronWeb.transactionBuilder.triggerConstantContract(
-      POOL_MANAGER_ADDRESS,
-      functionSelector,
-      {},
-      parameter
-    )
-
-    if (result.result && result.constant_result && result.constant_result.length > 0) {
-      // Parse hex results directly since decodeParams has API issues
-      const hexResult = result.constant_result[0]
-      const decoded = [
-        parseInt(hexResult.slice(0, 42), 16), // sqrtPriceX96
-        parseInt(hexResult.slice(42, 48), 16), // tick
-        parseInt(hexResult.slice(48, 54), 16), // protocolFee
-        parseInt(hexResult.slice(54, 60), 16), // lpFee
-      ]
-
-      console.log('🎯 Pool Slot0:', {
-        sqrtPriceX96: decoded[0].toString(),
-        tick: decoded[1].toString(),
-        protocolFee: decoded[2].toString(),
-        lpFee: decoded[3].toString(),
-      })
-
-      return decoded
-    } else {
-      console.log('⚠️  Could not fetch slot0')
-    }
-  } catch (error: any) {
-    console.error('❌ Failed to get slot0:', error.message)
-    return null
-  }
-}
-
 // Run the test
 if (require.main === module) {
   // First check pool count
   checkPoolCount()
     .then(() => {
+      const pool = getPoolCandidatesByTokens(TRX_ADDRESS, SUN_ADDRESS)[0]
       // Then run initialize test
-      return testInitialize()
+      return initialize(pool, 100n, 20000n)
     })
     .catch((error) => {
       console.error('💥 Unhandled error:', error)
@@ -319,4 +214,4 @@ if (require.main === module) {
 }
 
 // Exports
-export { testInitialize, testGetSlot0, createPoolKey, encodeParameters, calculatePoolId }
+export { initialize }

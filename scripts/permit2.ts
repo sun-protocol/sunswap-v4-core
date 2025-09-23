@@ -9,6 +9,8 @@ import { Address, privateKeyToAccount } from 'viem/accounts'
 import { encodeFunctionData, Hex } from 'viem'
 import { Permit2ForwardAbi } from '@pancakeswap/infinity-sdk'
 import { SUN_ADDRESS } from './address'
+import { toEvmHex } from './context'
+import { getCurrentAllowance } from './getPermit2Allowance'
 
 // Load environment variables
 dotenv.config()
@@ -87,122 +89,82 @@ function toHumanAmount(raw: bigint, decimals: number): string {
   return (Number(raw) / Math.pow(10, decimals)).toFixed(decimals)
 }
 
-// Function to get current allowance and nonce from Permit2
-async function getCurrentAllowance(userAddress: string, tokenAddress: string, spenderAddress: string) {
-  try {
-    const functionSelector = 'allowance(address,address,address)'
-    const parameter = [
-      { type: 'address', value: userAddress },
-      { type: 'address', value: tokenAddress },
-      { type: 'address', value: spenderAddress },
-    ]
-
-    const result = await tronWeb.transactionBuilder.triggerConstantContract(
-      PERMIT2_ADDRESS,
-      functionSelector,
-      {},
-      parameter
-    )
-
-    if (result.result && result.constant_result && result.constant_result.length > 0) {
-      const hexResult = result.constant_result[0]
-      const hexData = hexResult.startsWith('0x') ? hexResult.slice(2) : hexResult
-
-      // Each value is 32 bytes (64 hex chars)
-      const amountHex = '0x' + hexData.slice(0, 64)
-      const expirationHex = '0x' + hexData.slice(64, 128)
-      const nonceHex = '0x' + hexData.slice(128, 192)
-
-      const amount = parseInt(amountHex, 16)
-      const expiration = parseInt(expirationHex, 16)
-      const nonce = parseInt(nonceHex, 16)
-
-      return { amount, expiration, nonce }
-    }
-    return null
-  } catch (error) {
-    console.error('Error getting allowance:', error)
-    return null
-  }
-}
-
 // Function to generate permit signature using TronWeb
-async function generatePermitSignature(
+export async function generatePermitSignature(
   ownerAddress: string,
   tokenAddress: string,
   spenderAddress: string,
   amount: bigint,
-  nonce: number,
-  deadline: number
-) {
+  deadline: number,
+  sigDeadline: string
+): Promise<{ signature: string; permitSingle: any }> {
   try {
     console.log('✍️ Generating permit signature...')
 
-    let token = new Token(
-      3448148188, // Nile
+    const allowance = await getCurrentAllowance(
+      ownerAddress as `0x${string}`,
       tokenAddress as `0x${string}`,
-      TOKEN_DECIMALS,
-      'SUN',
-      'SUN'
+      spenderAddress as `0x${string}`
     )
+    const nonce = allowance ? allowance.nonce : 0
 
-    const permit = generatePermitTypedData(token, nonce, spenderAddress)
+    const domain = {
+      name: 'Permit2',
+      chainId: 3448148188,
+      verifyingContract: toEvmHex(PERMIT2_ADDRESS),
+    }
 
-    console.log('✅ Permit', permit)
+    const types = {
+      PermitDetails: [
+        { name: 'token', type: 'address' },
+        { name: 'amount', type: 'uint160' },
+        { name: 'expiration', type: 'uint48' },
+        { name: 'nonce', type: 'uint48' },
+      ],
+      PermitSingle: [
+        { name: 'details', type: 'PermitDetails' },
+        { name: 'spender', type: 'address' },
+        { name: 'sigDeadline', type: 'uint256' },
+      ],
+    }
 
-    // Get typed data for signing
-    const {
-      domain,
-      types,
-      values: message,
-    } = AllowanceTransfer.getPermitData(permit, toEthHex20(PERMIT2_ADDRESS) as `0x${string}`, 3448148188)
+    const permitSingle1 = {
+      details: {
+        token: tokenAddress,
+        amount: amount.toString(),
+        expiration: deadline.toString(),
+        nonce: nonce.toString(),
+      },
+      spender: spenderAddress,
+      sigDeadline: sigDeadline,
+    }
 
-    console.log('✅ Permit data', domain, types, message)
+    const permitSingle = [
+      [tokenAddress, amount.toString(), deadline.toString(), nonce.toString()],
+      spenderAddress,
+      sigDeadline,
+    ]
+    console.log('permitSingle1', JSON.stringify(permitSingle1, null, 2))
+    // 检查所有字段都不为 undefined
+    console.log('permitSingle', JSON.stringify(permitSingle, null, 2))
 
-    const signature = tronWeb.trx._signTypedData(domain, types, message)
-
-    // Create the permit data structure
-    // const permitData = {
-    //   details: {
-    //     token: tokenAddress,
-    //     amount: amount.toString(),
-    //     expiration: deadline,
-    //     nonce: nonce,
-    //   },
-    //   spender: spenderAddress,
-    //   sigDeadline: deadline.toString(),
-    // }
-
-    // // For TronWeb, we'll create a simple signature of the permit data
-    // // In a real implementation, you'd use EIP-712 typed data signing
-    // const permitString = JSON.stringify(permitData)
-    // const permitHash = tronWeb.utils.ethersUtils.sha256(permitString)
-
-    // // Sign the hash with the owner's private key
-    // const signature = await tronWeb.trx.sign(permitHash)
+    // 5. 生成签名
+    const signature = await tronWeb.trx._signTypedData(domain, types, permitSingle1)
 
     console.log('✅ Permit signature generated', signature)
-    return signature
+    return { signature, permitSingle: permitSingle1 }
   } catch (error: any) {
     console.error('❌ Failed to generate permit signature:', error.message)
-    return null
+    throw error
   }
 }
 
 // Function to call permit function in Permit2
-async function callPermitFunction(
-  ownerAddress: string,
-  tokenAddress: string,
-  spenderAddress: string,
-  amount: bigint,
-  nonce: number,
-  deadline: number,
-  signature: string
-) {
+async function callPermitFunction(ownerAddress: string, permitSingle: any, signature: string) {
   try {
     console.log('🔐 Calling permit function in Permit2...')
 
-    const functionSelector = 'permit(address,(address,uint160,uint48,uint48),bytes)'
+    const functionSelector = 'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)'
 
     // Create permitSingle tuple
     // const permitSingle = [
@@ -215,8 +177,8 @@ async function callPermitFunction(
     const parameter = [
       { type: 'address', value: ownerAddress },
       {
-        type: '(address,uint160,uint48,uint48)',
-        value: [tokenAddress, amount.toString(), deadline.toString(), nonce.toString()],
+        type: '((address,uint160,uint48,uint48),address,uint256)',
+        value: permitSingle,
       },
       { type: 'bytes', value: signature },
     ]
@@ -340,7 +302,8 @@ async function testPermit2Flow() {
     const tokenAddress = toEthHex20(TOKEN_ADDRESS)
     const spenderAddress = toEthHex20(SPENDER_ADDRESS)
     const amount = toRawAmount(AMOUNT, TOKEN_DECIMALS)
-    const deadline = Math.floor(Date.now() / 1000) + 3600 // 1 hour from now
+    const deadline = Math.floor(Date.now() / 1000) + 36000 // 1 hour from now
+    const sigDeadline = (Math.floor(Date.now() / 1000) + 3600).toString()
 
     console.log('📊 Test Parameters:')
     console.log('  User Address (EVM):', userAddress)
@@ -349,88 +312,33 @@ async function testPermit2Flow() {
     console.log('  Amount (Raw):', amount.toString())
     console.log('  Amount (Human):', AMOUNT)
     console.log('  Deadline:', new Date(deadline * 1000).toISOString())
-
-    // Step 1: Check current allowance
-    console.log('\n📋 Step 1: Checking current allowance...')
-    const currentAllowance = await getCurrentAllowance(userAddress, tokenAddress, spenderAddress)
-
-    if (currentAllowance) {
-      console.log('  Current Allowance:', toHumanAmount(BigInt(currentAllowance.amount), TOKEN_DECIMALS))
-      console.log('  Expiration:', new Date(currentAllowance.expiration * 1000).toISOString())
-      console.log('  Nonce:', currentAllowance.nonce)
-    } else {
-      console.log('  No current allowance found')
-    }
+    console.log('  Sig Deadline:', sigDeadline)
 
     // Step 2: Generate permit signature
     console.log('\n✍️ Step 2: Generating permit signature...')
-    const nonce = currentAllowance ? currentAllowance.nonce : 0
-    let permitSignature = await generatePermitSignature(
+    let { signature, permitSingle } = await generatePermitSignature(
       userAddress,
       tokenAddress,
       spenderAddress,
       amount,
-      nonce,
-      deadline
+      deadline,
+      sigDeadline
     )
 
-    if (!permitSignature) {
+    if (!signature) {
       throw new Error('Failed to generate permit signature')
     }
 
     // Step 3: Call permit function
     console.log('\n🔐 Step 3: Calling permit function...')
-    const permitTxId = await callPermitFunction(
-      userAddress,
-      tokenAddress,
-      spenderAddress,
-      amount,
-      nonce,
-      deadline,
-      permitSignature
-    )
+    const permitTxId = await callPermitFunction(userAddress, permitSingle, signature)
 
-    if (!permitTxId) {
-      throw new Error('Permit call failed')
+    if (permitTxId) {
+      console.log('✅ Permit transaction hash:', permitTxId)
+      return
+    } else {
+      throw new Error('Failed to call permit function')
     }
-
-    // Step 4: Wait and check new allowance
-    console.log('\n⏳ Step 4: Waiting for permit confirmation...')
-    await new Promise((resolve) => setTimeout(resolve, 5000))
-
-    const newAllowance = await getCurrentAllowance(userAddress, tokenAddress, spenderAddress)
-    if (newAllowance) {
-      console.log('  New Allowance:', toHumanAmount(BigInt(newAllowance.amount), TOKEN_DECIMALS))
-      console.log('  New Expiration:', new Date(newAllowance.expiration * 1000).toISOString())
-      console.log('  New Nonce:', newAllowance.nonce)
-    }
-
-    // Step 5: Test transferFrom (this would be signed by the spender in real usage)
-    console.log('\n💸 Step 5: Testing transferFrom with Permit2...')
-    const transferTransaction = await testTransferFromWithPermit2(
-      userAddress,
-      tokenAddress,
-      spenderAddress,
-      amount,
-      spenderAddress // recipient is the spender for this test
-    )
-
-    if (transferTransaction) {
-      console.log('✅ TransferFrom transaction prepared successfully!')
-      console.log('📝 Note: In real usage, this transaction would be signed by the spender')
-    }
-
-    console.log('\n🎉 Permit2 test completed successfully!')
-    console.log('\n📚 Summary:')
-    console.log('  1. ✅ Checked current allowance')
-    console.log('  2. ✅ Generated permit signature')
-    console.log('  3. ✅ Called permit function')
-    console.log('  4. ✅ Verified new allowance')
-    console.log('  5. ✅ Prepared transferFrom transaction')
-    console.log('\n💡 Next steps:')
-    console.log('  - The spender can now use the permitted allowance')
-    console.log('  - Use transferFrom to move tokens from user to recipient')
-    console.log('  - The permit will expire at the specified deadline')
   } catch (error: any) {
     console.error('❌ Permit2 test failed:', error)
 

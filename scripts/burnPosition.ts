@@ -1,17 +1,15 @@
 import { encodeAbiParameters, encodeFunctionData, Hex, parseAbiParameters, toHex, concatHex } from 'viem'
 import { CLPositionManagerAbi, ActionsPlanner, ACTIONS } from '@pancakeswap/infinity-sdk'
-import { TRX_ADDRESS, SUN_ADDRESS, POSITION_MANAGER_ADDRESS } from './address'
-import { tronWeb, toEvmHex, getEvmAccount } from './context'
+import { TRX_ADDRESS, SUN_ADDRESS, POSITION_MANAGER_ADDRESS, USDC_ADDRESS } from './address'
+import { tronWeb, toEvmHex, getEvmAccount, getPoolCandidatesByTokens } from './context'
+import { PoolCandidate } from './types'
 
 // Usage in your test script
-export const testBurnPosition = async () => {
-  //   const account = getEvmAccount()
-
-  let token0 = TRX_ADDRESS
-  let token1 = SUN_ADDRESS
-  let token0Evm = toEvmHex(token0)
-  let token1Evm = toEvmHex(token1)
-
+export const burnPosition = async (poolCandidate: PoolCandidate, tokenId: bigint) => {
+  let token0 = poolCandidate.token0
+  let token1 = poolCandidate.token1
+  let token0Evm = poolCandidate.token0Evm
+  let token1Evm = poolCandidate.token1Evm
   if (token0Evm.toLowerCase() >= token1Evm.toLowerCase()) {
     ;[token0, token1] = [token1, token0]
     ;[token0Evm, token1Evm] = [token1Evm, token0Evm]
@@ -21,7 +19,7 @@ export const testBurnPosition = async () => {
 
   try {
     const multicallData = encodeCLPositionManagerBurnCalldata(
-      15n,
+      tokenId,
       token0Evm as `0x${string}`,
       token1Evm as `0x${string}`,
       0n,
@@ -109,7 +107,8 @@ const encodeCLPositionManagerBurnCalldata = (
 }
 
 if (require.main === module) {
-  testBurnPosition().catch((e) => {
+  const poolCandidate = getPoolCandidatesByTokens(TRX_ADDRESS, SUN_ADDRESS)[0]
+  burnPosition(poolCandidate, 1n).catch((e) => {
     console.error(e)
     process.exit(1)
   })

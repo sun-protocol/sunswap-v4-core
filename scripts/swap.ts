@@ -1,4 +1,4 @@
-import { Hex, Address } from 'viem'
+import { Hex, Address, encodeAbiParameters } from 'viem'
 import {
   EncodedPoolKey,
   PoolKey,
@@ -8,7 +8,9 @@ import {
   ACTIONS,
 } from '@pancakeswap/infinity-sdk'
 
-import { TRX_ADDRESS, SUN_ADDRESS, POOL_MANAGER_ADDRESS, UNIVERSAL_ROUTER_ADDRESS } from './address'
+import { ABI_PARAMETER } from './universal-router-sdk/utils/createCommand'
+
+import { TRX_ADDRESS, SUN_ADDRESS, POOL_MANAGER_ADDRESS, UNIVERSAL_ROUTER_ADDRESS, USDC_ADDRESS } from './address'
 import {
   tronWeb,
   toEvmHex,
@@ -17,36 +19,55 @@ import {
   DEFAULT_FEE,
   DEFAULT_TICK_SPACING,
   DEFAULT_DEADLINE,
+  getPoolCandidatesByTokens,
 } from './context'
+import { generatePermitSignature } from './permit2'
+import { CommandType } from './universal-router-sdk/router.types'
+import { approveToPermit2 } from './approveToPermit2'
 
 // Usage in your test script
-export const testSwap = async () => {
+export const swap = async () => {
   const account = getEvmAccount()
 
-  let token0 = TRX_ADDRESS
-  let token1 = SUN_ADDRESS
+  const poolCandidates = getPoolCandidatesByTokens(SUN_ADDRESS, USDC_ADDRESS)
 
-  let token0Evm = toEvmHex(token0)
-  let token1Evm = toEvmHex(token1)
-
-  if (token0Evm.toLowerCase() >= token1Evm.toLowerCase()) {
-    ;[token0, token1] = [token1, token0]
-    ;[token0Evm, token1Evm] = [token1Evm, token0Evm]
-  }
-
+  const token0 = poolCandidates[0].token0
+  const token1 = poolCandidates[0].token1
+  const token0Evm = poolCandidates[0].token0Evm
+  const token1Evm = poolCandidates[0].token1Evm
+  const fee = poolCandidates[0].fee
+  const tickSpacing = poolCandidates[0].tickSpacing
+  const hook = poolCandidates[0].hook
   const zeroForOne = true
-  const amount = 100n
+  const amount = 1000000000000000000n
 
   try {
+    await approveToPermit2(token0, amount)
+    //sleep 5 seconds
+    await new Promise((resolve) => setTimeout(resolve, 5000))
+    const { signature, permitSingle } = await generatePermitSignature(
+      account.address,
+      token0Evm as `0x${string}`,
+      toEvmHex(UNIVERSAL_ROUTER_ADDRESS) as `0x${string}`,
+      amount,
+      DEFAULT_DEADLINE,
+      (Math.floor(Date.now() / 1000) + 3600).toString()
+    )
+
+    const permitInputData = encodeAbiParameters(ABI_PARAMETER[CommandType.PERMIT2_PERMIT], [
+      permitSingle,
+      signature as `0x${string}`,
+    ])
+
     const inputData = encodeUniversalRouterSwapCalldataFinalize(
       {
         currency0: token0Evm as `0x${string}`,
         currency1: token1Evm as `0x${string}`,
-        hooks: ZERO_HEX_ADDRESS,
+        hooks: hook as `0x${string}`,
         poolManager: toEvmHex(POOL_MANAGER_ADDRESS) as `0x${string}`,
-        fee: Number(DEFAULT_FEE),
+        fee: Number(fee),
         parameters: {
-          tickSpacing: DEFAULT_TICK_SPACING,
+          tickSpacing: tickSpacing,
         },
       },
       amount,
@@ -55,19 +76,22 @@ export const testSwap = async () => {
       zeroForOne
     )
 
-    if (zeroForOne && token0Evm !== ZERO_HEX_ADDRESS) {
-      await transfer(token0, amount.toString())
-    }
-    if (!zeroForOne && token1Evm !== ZERO_HEX_ADDRESS) {
-      await transfer(token1, amount.toString())
-    }
+    // if (zeroForOne && token0Evm !== ZERO_HEX_ADDRESS) {
+    //   await transfer(token0, amount.toString())
+    // }
+    // if (!zeroForOne && token1Evm !== ZERO_HEX_ADDRESS) {
+    //   await transfer(token1, amount.toString())
+    // }
 
     console.log('Input data:', inputData)
 
     let commands: `0x${string}` = '0x'
-    const inputs: `0x${string}`[] = [inputData]
+    const inputs: `0x${string}`[] = [permitInputData, inputData]
+    const permitCommand = 0x0a
     const InfyCommand = 0x12
-    commands = commands.concat(InfyCommand.toString(16).padStart(2, '0')) as Hex
+    commands = commands
+      .concat(permitCommand.toString(16).padStart(2, '0'))
+      .concat(InfyCommand.toString(16).padStart(2, '0')) as Hex
 
     const token0IsNative = token0Evm === ZERO_HEX_ADDRESS
     const token1IsNative = token1Evm === ZERO_HEX_ADDRESS
@@ -140,7 +164,7 @@ export const encodeUniversalRouterSwapCalldataFinalize = (
 
   planner.add(ACTIONS.CL_SWAP_EXACT_IN_SINGLE, [swapParams])
 
-  planner.add(ACTIONS.SETTLE, [zeroForOne ? poolKey.currency0 : poolKey.currency1, ACTION_CONSTANTS.OPEN_DELTA, false])
+  planner.add(ACTIONS.SETTLE, [zeroForOne ? poolKey.currency0 : poolKey.currency1, ACTION_CONSTANTS.OPEN_DELTA, true])
   planner.add(ACTIONS.TAKE, [
     zeroForOne ? poolKey.currency1 : poolKey.currency0,
     recipient,
@@ -173,7 +197,7 @@ async function transfer(tokenAddr: string, amount: string) {
 }
 
 if (require.main === module) {
-  testSwap().catch((e) => {
+  swap().catch((e) => {
     console.error(e)
     process.exit(1)
   })

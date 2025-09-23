@@ -2,6 +2,8 @@ import { TronWeb } from 'tronweb'
 import * as dotenv from 'dotenv'
 import { privateKeyToAccount } from 'viem/accounts'
 import Decimal from 'decimal.js'
+import { SUN_ADDRESS, TRX_ADDRESS, USDC_ADDRESS, WIN_ADDRESS } from './address'
+import { PoolKey, PoolCandidate } from './types'
 
 // Load environment variables
 dotenv.config()
@@ -34,7 +36,62 @@ const getEvmAccount = () => {
 const ZERO_HEX_ADDRESS = '0x0000000000000000000000000000000000000000'
 const DEFAULT_FEE = 500n
 const DEFAULT_TICK_SPACING = 10
+const DEFAULT_FEE_2 = 1000n
+const DEFAULT_TICK_SPACING_2 = 60
 const DEFAULT_DEADLINE = Math.floor(Date.now() / 1000) + 3600 // 1 hour
+
+const POOL_CANDIDATES: PoolCandidate[] = [
+  {
+    token0: TRX_ADDRESS,
+    token1: SUN_ADDRESS,
+    token0Evm: toEvmHex(TRX_ADDRESS),
+    token1Evm: toEvmHex(SUN_ADDRESS),
+    decimals0: 6,
+    decimals1: 18,
+    fee: DEFAULT_FEE,
+    tickSpacing: DEFAULT_TICK_SPACING,
+    hook: ZERO_HEX_ADDRESS,
+  },
+  {
+    token0: TRX_ADDRESS,
+    token1: USDC_ADDRESS,
+    token0Evm: toEvmHex(TRX_ADDRESS),
+    token1Evm: toEvmHex(USDC_ADDRESS),
+    decimals0: 6,
+    decimals1: 6,
+    fee: DEFAULT_FEE,
+    tickSpacing: DEFAULT_TICK_SPACING,
+    hook: ZERO_HEX_ADDRESS,
+  },
+  {
+    token0: SUN_ADDRESS,
+    token1: USDC_ADDRESS,
+    token0Evm: toEvmHex(SUN_ADDRESS),
+    token1Evm: toEvmHex(USDC_ADDRESS),
+    decimals0: 18,
+    decimals1: 6,
+    fee: DEFAULT_FEE_2,
+    tickSpacing: DEFAULT_TICK_SPACING_2,
+    hook: ZERO_HEX_ADDRESS,
+  },
+  {
+    token0: WIN_ADDRESS,
+    token1: USDC_ADDRESS,
+    token0Evm: toEvmHex(WIN_ADDRESS),
+    token1Evm: toEvmHex(USDC_ADDRESS),
+    decimals0: 6,
+    decimals1: 6,
+    fee: DEFAULT_FEE_2,
+    tickSpacing: DEFAULT_TICK_SPACING_2,
+    hook: ZERO_HEX_ADDRESS,
+  },
+]
+
+function getPoolCandidatesByTokens(token0: string, token1: string): PoolCandidate[] {
+  return POOL_CANDIDATES.filter(
+    (pool) => (pool.token0 === token0 && pool.token1 === token1) || (pool.token0 === token1 && pool.token1 === token0)
+  )
+}
 
 // to make sure tronWeb is initialized
 function toEvmHex(addr: string): string {
@@ -202,6 +259,20 @@ function toRawAmount(human: string, decimals: number): string {
   return new Decimal(human).mul(new Decimal(10).pow(decimals)).toFixed(0)
 }
 
+// Helper function to calculate pool ID using simple hash
+async function calculatePoolId(poolKey: PoolKey): Promise<string> {
+  try {
+    // Create a simple deterministic ID
+    const concatenated =
+      poolKey.currency0 + poolKey.currency1 + poolKey.hooks + poolKey.poolManager + poolKey.fee + poolKey.parameters
+    const hash = tronWeb.utils.ethersUtils.sha256(tronWeb.toHex(concatenated))
+    return hash
+  } catch (error: any) {
+    console.error('❌ Failed to calculate pool ID:', error.message)
+    return ''
+  }
+}
+
 // 測試函數
 function testHexToBytes() {
   const testHex = '0x0000000000000000000000000000000000000000000000000000000000000000'
@@ -249,8 +320,13 @@ export {
   parseConstantResult,
   alignToSpacing,
   toRawAmount,
+  getPoolCandidatesByTokens,
+  calculatePoolId,
   ZERO_HEX_ADDRESS,
   DEFAULT_FEE,
   DEFAULT_TICK_SPACING,
+  DEFAULT_FEE_2,
+  DEFAULT_TICK_SPACING_2,
   DEFAULT_DEADLINE,
+  POOL_CANDIDATES,
 }

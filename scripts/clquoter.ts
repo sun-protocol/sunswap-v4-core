@@ -9,14 +9,17 @@ import {
   DEFAULT_TICK_SPACING,
   parseConstantResult,
 } from './context'
-import { SUN_ADDRESS, TRX_ADDRESS, POOL_MANAGER_ADDRESS, CL_QUOTER_ADDRESS } from './address'
+import { SUN_ADDRESS, TRX_ADDRESS, POOL_MANAGER_ADDRESS, CL_QUOTER_ADDRESS, USDC_ADDRESS } from './address'
 
 async function testCLQuoter(): Promise<void> {
   const TOKEN0 = TRX_ADDRESS
-  const TOKEN1 = SUN_ADDRESS
+  const TOKEN1 = USDC_ADDRESS
 
-  const token0 = toEvmHex(TOKEN0)
-  const token1 = toEvmHex(TOKEN1)
+  let token0 = toEvmHex(TOKEN0)
+  let token1 = toEvmHex(TOKEN1)
+  if (token0.toLowerCase() >= token1.toLowerCase()) {
+    ;[token0, token1] = [token1, token0]
+  }
   const poolManager = toEvmHex(POOL_MANAGER_ADDRESS)
   const amountIn = 100n
   const zeroForOne = true
