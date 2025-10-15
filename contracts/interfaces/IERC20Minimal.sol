@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-/// @title Minimal ERC20 interface for PancakeSwap
-/// @notice Contains a subset of the full ERC20 interface that is used in PancakeSwap V3
+/// @title Minimal ERC20 interface for SunSwap
+/// @notice Contains a subset of the full ERC20 interface that is used in SunSwap V3
 interface IERC20Minimal {
     /// @notice Returns the balance of a token
     /// @param account The account for which to look up the number of tokens it has, i.e. its balance

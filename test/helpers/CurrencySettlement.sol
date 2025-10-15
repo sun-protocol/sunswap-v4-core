@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-// Copyright (C) 2024 PancakeSwap
+// Copyright (C) 2025 SunSwap
 pragma solidity ^0.8.24;
 
 import {Currency} from "../../src/types/Currency.sol";
