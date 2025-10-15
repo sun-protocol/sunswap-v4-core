@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import {IERC20Minimal} from "../interfaces/IERC20Minimal.sol";
 import {CustomRevert} from "../libraries/CustomRevert.sol";
+import {SafeTransferLib} from "../libraries/SafeTransferLib.sol";
 
 type Currency is address;
 
@@ -54,7 +55,8 @@ library CurrencyLibrary {
         } else {
             //TODO need test USDT on TRON
             address token = Currency.unwrap(currency);
-            (success, ) = token.call(abi.encodeWithSelector(0xa9059cbb, to, amount));
+            success = SafeTransferLib.safeTransfer(token, to, amount);
+            // (success, ) = token.call(abi.encodeWithSelector(0xa9059cbb, to, amount));
                
             // revert with ERC20TransferFailed, containing the bubbled up error as an argument
             if (!success) {
