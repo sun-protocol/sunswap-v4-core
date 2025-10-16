@@ -82,7 +82,7 @@ contract VaultTokenTest is Test {
         assertEq(token.balanceOf(receiver, _toCurrency(1337)), 70);
     }
 
-    function testTransferFromWithInfiniteApproval() public {
+    function testTransferFromWithv4Approval() public {
         address sender = address(0xABCD);
         address receiver = address(0xBEEF);
 
@@ -259,7 +259,7 @@ contract VaultTokenTest is Test {
         }
     }
 
-    function testTransferFromWithInfiniteApproval(
+    function testTransferFromWithv4Approval(
         address sender,
         address receiver,
         Currency currency,

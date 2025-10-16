@@ -11,7 +11,7 @@ module.exports = async ({
   const res = await deploy('ProtocolFeeController', {
     from: deployer,
     gasLimit: 4000000,
-    args: ['0xD033B0fD1B38D9a8f04a8C2Adc55b91c288930b1'],
+    args: ['0xD033B0fD1B38D9a8f04a8C2Adc55b91c288930b1'], //poolmanager
     tags: 'lumi2',
   });
   console.log(res)

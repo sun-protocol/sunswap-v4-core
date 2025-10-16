@@ -13,7 +13,7 @@ library TickBitmap {
     /// @param tickSpacing The tick spacing of the pool
     error TickMisaligned(int24 tick, int24 tickSpacing);
 
-    /// @dev round towards negative infinity
+    /// @dev round towards negative v4
     function compress(int24 tick, int24 tickSpacing) internal pure returns (int24 compressed) {
         // Equivalent to:
         //   compressed = tick / tickSpacing;
