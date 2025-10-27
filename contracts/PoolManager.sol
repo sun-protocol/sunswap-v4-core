@@ -332,7 +332,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         );
 
         /// @notice Make sure the first event is noted, so that later events from afterHook won't get mixed up with this one
-        emit ModifyLiquidity(id, msg.sender, params.tickLower, params.tickUpper, params.liquidityDelta, params.salt);
+        emit ModifyLiquidity(id, msg.sender, params.tickLower, params.tickUpper, params.liquidityDelta, params.salt, delta);
 
         BalanceDelta hookDelta;
         // notice that both generated delta and feeDelta (from lpFee) will both be counted on the user
