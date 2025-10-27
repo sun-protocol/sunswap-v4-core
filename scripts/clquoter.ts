@@ -8,34 +8,35 @@ import {
   DEFAULT_FEE,
   DEFAULT_TICK_SPACING,
   parseConstantResult,
+  getPoolCandidatesByTokens,
 } from './context'
-import { SUN_ADDRESS, TRX_ADDRESS, POOL_MANAGER_ADDRESS, CL_QUOTER_ADDRESS, USDC_ADDRESS } from './address'
+import { SUN_ADDRESS, TRX_ADDRESS, POOL_MANAGER_ADDRESS, CL_QUOTER_ADDRESS, USDC_ADDRESS, WIN_ADDRESS } from './address'
 
 async function testCLQuoter(): Promise<void> {
-  const TOKEN0 = TRX_ADDRESS
-  const TOKEN1 = USDC_ADDRESS
+  const poolCandidates = getPoolCandidatesByTokens(WIN_ADDRESS, USDC_ADDRESS)
+  const TOKEN0 = poolCandidates[0].token0
+  const TOKEN1 = poolCandidates[0].token1
 
+  let zeroForOne = false
   let token0 = toEvmHex(TOKEN0)
   let token1 = toEvmHex(TOKEN1)
   if (token0.toLowerCase() >= token1.toLowerCase()) {
     ;[token0, token1] = [token1, token0]
+    zeroForOne = true
   }
-  const poolManager = toEvmHex(POOL_MANAGER_ADDRESS)
-  const amountIn = 100n
-  const zeroForOne = true
+  const amountIn = 100000n
 
   try {
     // Method 1: Use triggerSmartContract
     try {
-      const functionSelector =
-        'quoteExactInputSingle(((address,address,address,address,uint24,bytes32),bool,uint128,bytes))'
+      const functionSelector = 'quoteExactInputSingle(((address,address,address,uint24,bytes32),bool,uint128,bytes))'
 
       // TronWeb parameter format
       const parameter = [
         {
-          type: '((address,address,address,address,uint24,bytes32),bool,uint128,bytes)',
+          type: '((address,address,address,uint24,bytes32),bool,uint128,bytes)',
           value: [
-            [token0, token1, ZERO_HEX_ADDRESS, poolManager, DEFAULT_FEE, encodeParameters(DEFAULT_TICK_SPACING)],
+            [token0, token1, ZERO_HEX_ADDRESS, poolCandidates[0].fee, encodeParameters(poolCandidates[0].tickSpacing)],
             zeroForOne,
             amountIn,
             '0x',

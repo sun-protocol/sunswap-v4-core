@@ -1,19 +1,15 @@
 import { Address } from 'viem/accounts'
 import { encodeFunctionData, Hex } from 'viem'
-import {
-  Permit2Signature,
-  encodeCLPositionManagerInitializePoolCalldata,
-  Permit2ForwardAbi,
-  CLPositionConfig,
-  encodeCLPoolParameters,
-  CLPositionManagerAbi,
-  ACTION_CONSTANTS,
-  encodeCLPositionManagerIncreaseLiquidityCalldata,
-  ActionsPlanner,
-  EncodedCLPositionConfig,
-  ACTIONS,
-} from '@pancakeswap/infinity-sdk'
+import { Permit2Signature, Permit2ForwardAbi, encodeCLPoolParameters } from '@pancakeswap/infinity-sdk'
 
+import {
+  ActionsPlanner,
+  ACTIONS,
+  CLPositionConfig,
+  EncodedCLPositionConfig,
+  ACTION_CONSTANTS,
+  CLPositionManagerAbi,
+} from './action'
 import {
   TickMath,
   maxLiquidityForAmount0Precise,
@@ -27,6 +23,7 @@ import {
   POOL_MANAGER_ADDRESS,
   USDC_ADDRESS,
   WIN_ADDRESS,
+  USDT_ADDRESS,
 } from './address'
 import {
   getEvmAccount,
@@ -52,6 +49,7 @@ export const mintPosition = async (
   poolCandidate: PoolCandidate,
   token0Amount: number,
   token1Amount: number,
+  skipTransfer?: boolean,
   tickLower?: number,
   tickUpper?: number
 ): Promise<bigint> => {
@@ -92,11 +90,11 @@ export const mintPosition = async (
     let token0Permit2Signature: Permit2Signature | null = null
     let token1Permit2Signature: Permit2Signature | null = null
 
-    if (token0Evm != ZERO_HEX_ADDRESS) {
+    if (token0Evm != ZERO_HEX_ADDRESS && !skipTransfer) {
       await transfer(token0, amount0.toString(), toEvmHex(POSITION_MANAGER_ADDRESS) as `0x${string}`)
     }
 
-    if (token1Evm != ZERO_HEX_ADDRESS) {
+    if (token1Evm != ZERO_HEX_ADDRESS && !skipTransfer) {
       await transfer(token1, amount1.toString(), toEvmHex(POSITION_MANAGER_ADDRESS) as `0x${string}`)
     }
 
@@ -106,7 +104,6 @@ export const mintPosition = async (
         currency0: token0Evm as `0x${string}`,
         currency1: token1Evm as `0x${string}`,
         hooks: ZERO_HEX_ADDRESS,
-        poolManager: toEvmHex(POOL_MANAGER_ADDRESS) as `0x${string}`,
         fee: Number(fee),
         parameters: { tickSpacing: tickSpacing },
       })
@@ -133,24 +130,29 @@ export const mintPosition = async (
     //   const liquidityFromAmount1 = maxLiquidityForAmount1(sqrtPriceX96, TickMath.getSqrtRatioAtTick(tickLower), amount1)
     //   liquidity = liquidityFromAmount0 < liquidityFromAmount1 ? liquidityFromAmount0 : liquidityFromAmount1
     // }
-
+    console.log('amount0', amount0)
+    console.log('amount1', amount1)
+    console.log('tickLower', tickLower)
+    console.log('tickUpper', tickUpper)
+    console.log('tickSpacing', tickSpacing)
+    console.log('fee', fee)
+    console.log('token0Evm', token0Evm)
+    console.log('token1Evm', token1Evm)
+    console.log('token0Decimals', token0Decimals)
+    console.log('token1Decimals', token1Decimals)
     console.log('liquidity', liquidity)
-    // return
 
     const input = {
-      isInitialized: true,
       sqrtPriceX96: 0n, // Your sqrt price
       positionConfig: {
         poolKey: {
           currency0: token0Evm,
           currency1: token1Evm,
           hooks: ZERO_HEX_ADDRESS,
-          poolManager: toEvmHex(POOL_MANAGER_ADDRESS) as `0x${string}`,
           fee: fee,
           parameters: {
             tickSpacing: tickSpacing,
           },
-          /* your pool key */
         },
         tickLower: tickLower,
         tickUpper: tickUpper,
@@ -222,18 +224,54 @@ export const mintPosition = async (
       undefined
     )
 
-    console.log('transaction', transaction)
+    if (transaction.result && transaction.result.result) {
+      console.log('✅ Transaction built successfully!')
 
-    const signedTx = await tronWeb.trx.sign(transaction.transaction)
+      // Sign and broadcast the transaction
+      const signedTransaction = await tronWeb.trx.sign(transaction.transaction)
+      const broadcast = await tronWeb.trx.sendRawTransaction(signedTransaction)
 
-    const result = await tronWeb.trx.sendRawTransaction(signedTx)
+      console.log('🔗 Transaction Hash:', broadcast.txid)
 
-    console.log('Transaction broadcasted!')
-    console.log('TxID:', result.txid)
-    console.log('Result:', result)
+      // Wait for confirmation
+      if (broadcast.result) {
+        console.log('⏳ Waiting for transaction confirmation...')
 
-    // sleep 5 seconds
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+        // Wait a bit for the transaction to be confirmed
+        await new Promise((resolve) => setTimeout(resolve, 6000))
+
+        try {
+          const txInfo = await tronWeb.trx.getTransactionInfo(broadcast.txid)
+          console.log('📊 Transaction Info:', {
+            blockNumber: txInfo.blockNumber,
+            fee: txInfo.fee,
+            energyUsed: txInfo.receipt?.energy_usage_total || 0,
+            result: txInfo.receipt?.result || 'SUCCESS',
+          })
+
+          // Check events
+          if (txInfo.log && txInfo.log.length > 0) {
+            console.log('📧 Events emitted:')
+            for (const log of txInfo.log) {
+              console.log('📄 Event:', {
+                address: tronWeb.address.fromHex(log.address),
+                topics: log.topics,
+                data: log.data,
+              })
+            }
+          }
+        } catch (infoError: any) {
+          console.log('⚠️  Could not fetch transaction details:', infoError.message)
+          throw infoError
+        }
+      }
+    } else {
+      console.error('❌ Failed to build transaction:', transaction)
+      throw transaction
+    }
+
+    // Additional wait for position to be indexed
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
     const tokenId = await getPositionCount()
 
@@ -265,9 +303,7 @@ async function transfer(tokenAddr: string, amount: string, to: string) {
 }
 
 const addCLLiquidityMulticall = ({
-  isInitialized,
   sqrtPriceX96,
-  tokenId,
   positionConfig,
   liquidity,
   owner,
@@ -279,9 +315,7 @@ const addCLLiquidityMulticall = ({
   token0Permit2Signature,
   token1Permit2Signature,
 }: {
-  isInitialized: boolean
   sqrtPriceX96: bigint
-  tokenId?: bigint
   positionConfig: CLPositionConfig
   liquidity: bigint
   owner: Address
@@ -295,9 +329,9 @@ const addCLLiquidityMulticall = ({
 }) => {
   const calls: Hex[] = []
 
-  if (!isInitialized) {
-    calls.push(encodeCLPositionManagerInitializePoolCalldata(positionConfig.poolKey, sqrtPriceX96))
-  }
+  // if (!isInitialized) {
+  //   calls.push(encodeCLPositionManagerInitializePoolCalldata(positionConfig.poolKey, sqrtPriceX96))
+  // }
   if (token0Permit2Signature) {
     calls.push(encodePermit2(owner, token0Permit2Signature))
   } else {
@@ -311,32 +345,17 @@ const addCLLiquidityMulticall = ({
   }
 
   // mint
-  if (typeof tokenId === 'undefined') {
-    calls.push(
-      encodeCLPositionManagerMintCalldata(
-        positionConfig,
-        liquidity,
-        recipient,
-        amount0Max,
-        amount1Max,
-        deadline,
-        modifyPositionHookData
-      )
+  calls.push(
+    encodeCLPositionManagerMintCalldata(
+      positionConfig,
+      liquidity,
+      recipient,
+      amount0Max,
+      amount1Max,
+      deadline,
+      modifyPositionHookData
     )
-  } else {
-    // increase liquidity
-    calls.push(
-      encodeCLPositionManagerIncreaseLiquidityCalldata(
-        tokenId,
-        positionConfig,
-        liquidity,
-        amount0Max,
-        amount1Max,
-        modifyPositionHookData,
-        deadline
-      )
-    )
-  }
+  )
 
   return calls
 }
@@ -384,9 +403,20 @@ export const encodeCLPositionManagerMintCalldata = (
     },
   }
 
+  console.log('encodedPositionConfig', encodedPositionConfig)
+  console.log('recipient', recipient)
+  console.log('liquidity', liquidity)
+  console.log('amount0Max', amount0Max)
+  console.log('amount1Max', amount1Max)
+  console.log('hookData', hookData)
+
+  // [ACTIONS.CL_MINT_POSITION]: parseAbiParameters([
+  //   'PositionConfig positionConfig, uint128 liquidity, uint128 amount0Max, uint128 amount1Max, address owner, bytes hookData',
+  //   ...ABI_STRUCT_POSITION_CONFIG,
+  // ]),
+
   planner.add(ACTIONS.CL_MINT_POSITION, [encodedPositionConfig, liquidity, amount0Max, amount1Max, recipient, hookData])
 
-  console.log('encodedPositionConfig', encodedPositionConfig)
   planner.add(ACTIONS.SETTLE, [encodedPositionConfig.poolKey.currency0, ACTION_CONSTANTS.OPEN_DELTA, false])
   planner.add(ACTIONS.SETTLE, [encodedPositionConfig.poolKey.currency1, ACTION_CONSTANTS.OPEN_DELTA, false])
 
@@ -406,8 +436,8 @@ export const encodeCLPositionManagerMintCalldata = (
 }
 
 if (require.main === module) {
-  const poolCandidate = getPoolCandidatesByTokens(TRX_ADDRESS, SUN_ADDRESS)[0]
-  mintPosition(poolCandidate, 1000, 1000)
+  const poolCandidate = getPoolCandidatesByTokens(USDT_ADDRESS, USDC_ADDRESS)[0]
+  mintPosition(poolCandidate, 100, 100, false, 8000, 9000)
     .then((tokenId) => {
       console.log('tokenId', tokenId)
     })

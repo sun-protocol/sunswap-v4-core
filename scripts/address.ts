@@ -1,9 +1,9 @@
 // address.ts is a file that contains the addresses of the contracts that are used in the project
 
-export const POOL_MANAGER_ADDRESS: string = 'TUx5UYBsGqC2sU124DmJUVtEexaaFP61Do'
-export const CL_QUOTER_ADDRESS: string = 'TZAxNP4itqwcrQhEjN1gqmeNptQtTauJsg'
-export const UNIVERSAL_ROUTER_ADDRESS: string = 'TCHwHCFHS7NDagEgztzVRv7ZP9XPVJxmJx'
-export const POSITION_MANAGER_ADDRESS: string = 'TUrtUhPsLRQNYJRPBjyCh7a8zcMmwrrFTi'
+export const POOL_MANAGER_ADDRESS: string = 'TGhwgsZywhcZ2dxp7zHShSQDKALbVy298t'
+export const CL_QUOTER_ADDRESS: string = 'TStdN3jdW5StnN5ECfZahrxEU1WqVHropJ'
+export const UNIVERSAL_ROUTER_ADDRESS: string = 'TPm6NwxTRkZwoWTbC8po98g9caFpxpuHiG'
+export const POSITION_MANAGER_ADDRESS: string = 'TRLwDEiKyzxJHWm4bpMrWtxmfPz7pukUAK'
 export const PERMIT2_ADDRESS: string = 'TYQuuhGbEMxF7nZxUHV3uHJxAVVAegNU9h'
 
 export const TRX_ADDRESS: string = 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb'
