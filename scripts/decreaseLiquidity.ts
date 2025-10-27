@@ -80,13 +80,51 @@ export const decreaseLiquidity = async (poolCandidate: PoolCandidate, tokenId: b
       undefined
     )
 
-    const signedTx = await tronWeb.trx.sign(transaction.transaction)
+    if (transaction.result && transaction.result.result) {
+      console.log('✅ Transaction built successfully!')
 
-    const result = await tronWeb.trx.sendRawTransaction(signedTx)
+      // Sign and broadcast the transaction
+      const signedTransaction = await tronWeb.trx.sign(transaction.transaction)
+      const broadcast = await tronWeb.trx.sendRawTransaction(signedTransaction)
 
-    console.log('Transaction broadcasted!')
-    console.log('TxID:', result.txid)
-    console.log('Result:', result)
+      console.log('🔗 Transaction Hash:', broadcast.txid)
+
+      // Wait for confirmation
+      if (broadcast.result) {
+        console.log('⏳ Waiting for transaction confirmation...')
+
+        // Wait a bit for the transaction to be confirmed
+        await new Promise((resolve) => setTimeout(resolve, 6000))
+
+        try {
+          const txInfo = await tronWeb.trx.getTransactionInfo(broadcast.txid)
+          console.log('📊 Transaction Info:', {
+            blockNumber: txInfo.blockNumber,
+            fee: txInfo.fee,
+            energyUsed: txInfo.receipt?.energy_usage_total || 0,
+            result: txInfo.receipt?.result || 'SUCCESS',
+          })
+
+          // Check events
+          if (txInfo.log && txInfo.log.length > 0) {
+            console.log('📧 Events emitted:')
+            for (const log of txInfo.log) {
+              console.log('📄 Event:', {
+                address: tronWeb.address.fromHex(log.address),
+                topics: log.topics,
+                data: log.data,
+              })
+            }
+          }
+        } catch (infoError: any) {
+          console.log('⚠️  Could not fetch transaction details:', infoError.message)
+          throw infoError
+        }
+      }
+    } else {
+      console.error('❌ Failed to build transaction:', transaction)
+      throw transaction
+    }
   } catch (error) {
     console.error('Error:', error)
   }

@@ -4,17 +4,18 @@ import {
   Permit2Signature,
   encodeCLPositionManagerInitializePoolCalldata,
   Permit2ForwardAbi,
-  CLPositionConfig,
   encodeCLPoolParameters,
-  CLPositionManagerAbi,
-  ACTION_CONSTANTS,
-  //   encodeCLPositionManagerIncreaseLiquidityCalldata,
   encodeCLPositionModifyLiquidities,
-  ActionsPlanner,
-  EncodedCLPositionConfig,
-  ACTIONS,
 } from '@pancakeswap/infinity-sdk'
 
+import {
+  ActionsPlanner,
+  ACTIONS,
+  CLPositionConfig,
+  EncodedCLPositionConfig,
+  ACTION_CONSTANTS,
+  CLPositionManagerAbi,
+} from './action'
 import { TickMath, maxLiquidityForAmounts } from '@pancakeswap/v3-sdk'
 import {
   TRX_ADDRESS,
@@ -89,7 +90,6 @@ export const addLiquidity = async (
         currency0: token0Evm as `0x${string}`,
         currency1: token1Evm as `0x${string}`,
         hooks: ZERO_HEX_ADDRESS,
-        poolManager: toEvmHex(POOL_MANAGER_ADDRESS) as `0x${string}`,
         fee: Number(fee),
         parameters: { tickSpacing: tickSpacing },
       })
@@ -110,7 +110,6 @@ export const addLiquidity = async (
 
     const input = {
       tokenId: tokenId,
-      isInitialized: true,
       sqrtPriceX96: 0n, // it could be 0n in this case
       positionConfig: {
         poolKey: {
@@ -174,15 +173,51 @@ export const addLiquidity = async (
       undefined
     )
 
-    console.log('transaction', transaction)
+    if (transaction.result && transaction.result.result) {
+      console.log('✅ Transaction built successfully!')
 
-    const signedTx = await tronWeb.trx.sign(transaction.transaction)
+      // Sign and broadcast the transaction
+      const signedTransaction = await tronWeb.trx.sign(transaction.transaction)
+      const broadcast = await tronWeb.trx.sendRawTransaction(signedTransaction)
 
-    const result = await tronWeb.trx.sendRawTransaction(signedTx)
+      console.log('🔗 Transaction Hash:', broadcast.txid)
 
-    console.log('Transaction broadcasted!')
-    console.log('TxID:', result.txid)
-    console.log('Result:', result)
+      // Wait for confirmation
+      if (broadcast.result) {
+        console.log('⏳ Waiting for transaction confirmation...')
+
+        // Wait a bit for the transaction to be confirmed
+        await new Promise((resolve) => setTimeout(resolve, 6000))
+
+        try {
+          const txInfo = await tronWeb.trx.getTransactionInfo(broadcast.txid)
+          console.log('📊 Transaction Info:', {
+            blockNumber: txInfo.blockNumber,
+            fee: txInfo.fee,
+            energyUsed: txInfo.receipt?.energy_usage_total || 0,
+            result: txInfo.receipt?.result || 'SUCCESS',
+          })
+
+          // Check events
+          if (txInfo.log && txInfo.log.length > 0) {
+            console.log('📧 Events emitted:')
+            for (const log of txInfo.log) {
+              console.log('📄 Event:', {
+                address: tronWeb.address.fromHex(log.address),
+                topics: log.topics,
+                data: log.data,
+              })
+            }
+          }
+        } catch (infoError: any) {
+          console.log('⚠️  Could not fetch transaction details:', infoError.message)
+          throw infoError
+        }
+      }
+    } else {
+      console.error('❌ Failed to build transaction:', transaction)
+      throw transaction
+    }
   } catch (error) {
     console.error('Error:', error)
   }
@@ -209,7 +244,6 @@ async function transfer(tokenAddr: string, amount: string, to: string) {
 }
 
 const addCLLiquidityMulticall = ({
-  isInitialized,
   sqrtPriceX96,
   tokenId,
   positionConfig,
@@ -223,7 +257,6 @@ const addCLLiquidityMulticall = ({
   token0Permit2Signature,
   token1Permit2Signature,
 }: {
-  isInitialized: boolean
   sqrtPriceX96: bigint
   tokenId?: bigint
   positionConfig: CLPositionConfig
@@ -239,9 +272,6 @@ const addCLLiquidityMulticall = ({
 }) => {
   const calls: Hex[] = []
 
-  if (!isInitialized) {
-    calls.push(encodeCLPositionManagerInitializePoolCalldata(positionConfig.poolKey, sqrtPriceX96))
-  }
   if (token0Permit2Signature) {
     calls.push(encodePermit2(owner, token0Permit2Signature))
   } else {

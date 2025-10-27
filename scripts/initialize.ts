@@ -21,14 +21,7 @@ import { tronWeb, DEFAULT_FEE_2, DEFAULT_TICK_SPACING_2, encodeParameters, getPo
 import { PoolCandidate, PoolKey } from './types'
 
 // Helper function to create pool key
-function createPoolKey(
-  currency0: string,
-  currency1: string,
-  hooks: string,
-  poolManager: string,
-  fee: number,
-  tickSpacing: number
-): PoolKey {
+function createPoolKey(currency0: string, currency1: string, hooks: string, fee: number, tickSpacing: number): PoolKey {
   // Ensure currency0 < currency1 (addresses must be sorted)
   if (currency0.toLowerCase() >= currency1.toLowerCase()) {
     ;[currency0, currency1] = [currency1, currency0]
@@ -38,7 +31,6 @@ function createPoolKey(
     currency0,
     currency1,
     hooks,
-    poolManager,
     fee,
     parameters: encodeParameters(tickSpacing),
   }
@@ -57,13 +49,12 @@ async function initialize(poolCandidate: PoolCandidate, token0Amount: bigint, to
     let fee = poolCandidate.fee
     let tickSpacing = poolCandidate.tickSpacing
     // Create pool key
-    const poolKey = createPoolKey(token0, token1, hooks, POOL_MANAGER_ADDRESS, Number(fee), tickSpacing)
+    const poolKey = createPoolKey(token0, token1, hooks, Number(fee), tickSpacing)
 
     console.log('📋 Pool Key:', {
       currency0: poolKey.currency0,
       currency1: poolKey.currency1,
       hooks: poolKey.hooks,
-      poolManager: poolKey.poolManager,
       fee: poolKey.fee,
       parameters: poolKey.parameters,
       tickSpacing: tickSpacing,
@@ -84,14 +75,13 @@ async function initialize(poolCandidate: PoolCandidate, token0Amount: bigint, to
 
     // Method 1: Use triggerSmartContract
     try {
-      const functionSelector = 'initialize((address,address,address,address,uint24,bytes32),uint160)'
+      const functionSelector = 'initialize((address,address,address,uint24,bytes32),uint160)'
 
       // TronWeb parameter format
       const parameter = [
         { type: 'address', value: poolKey.currency0 },
         { type: 'address', value: poolKey.currency1 },
         { type: 'address', value: poolKey.hooks },
-        { type: 'address', value: poolKey.poolManager },
         { type: 'uint24', value: poolKey.fee },
         { type: 'bytes32', value: poolKey.parameters },
         { type: 'uint160', value: sqrtPriceX96.toString() },
@@ -122,7 +112,7 @@ async function initialize(poolCandidate: PoolCandidate, token0Amount: bigint, to
           console.log('⏳ Waiting for transaction confirmation...')
 
           // Wait a bit for the transaction to be confirmed
-          await new Promise((resolve) => setTimeout(resolve, 3000))
+          await new Promise((resolve) => setTimeout(resolve, 6000))
 
           try {
             const txInfo = await tronWeb.trx.getTransactionInfo(broadcast.txid)
@@ -146,13 +136,16 @@ async function initialize(poolCandidate: PoolCandidate, token0Amount: bigint, to
             }
           } catch (infoError: any) {
             console.log('⚠️  Could not fetch transaction details:', infoError.message)
+            throw infoError
           }
         }
       } else {
         console.error('❌ Failed to build transaction:', result)
+        throw result
       }
     } catch (triggerError: any) {
       console.error('❌ Trigger smart contract failed:', triggerError.message)
+      throw triggerError
     }
 
     console.log('🎉 Initialize test completed!')
@@ -171,6 +164,7 @@ async function initialize(poolCandidate: PoolCandidate, token0Amount: bigint, to
         console.log('💡 Solution: Fee must be ≤ 1,000,000 (100%)')
       }
     }
+    throw error
   }
 }
 
@@ -203,9 +197,9 @@ if (require.main === module) {
   // First check pool count
   checkPoolCount()
     .then(() => {
-      const pool = getPoolCandidatesByTokens(TRX_ADDRESS, SUN_ADDRESS)[0]
+      const pool = getPoolCandidatesByTokens(USDT_ADDRESS, USDC_ADDRESS)[0]
       // Then run initialize test
-      return initialize(pool, 100n, 20000n)
+      return initialize(pool, pool.token0Amount, pool.token1Amount)
     })
     .catch((error) => {
       console.error('💥 Unhandled error:', error)

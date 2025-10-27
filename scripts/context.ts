@@ -2,7 +2,7 @@ import { TronWeb } from 'tronweb'
 import * as dotenv from 'dotenv'
 import { privateKeyToAccount } from 'viem/accounts'
 import Decimal from 'decimal.js'
-import { SUN_ADDRESS, TRX_ADDRESS, USDC_ADDRESS, WIN_ADDRESS } from './address'
+import { SUN_ADDRESS, TRX_ADDRESS, USDC_ADDRESS, USDT_ADDRESS, WIN_ADDRESS } from './address'
 import { PoolKey, PoolCandidate } from './types'
 
 // Load environment variables
@@ -42,6 +42,8 @@ const DEFAULT_DEADLINE = Math.floor(Date.now() / 1000) + 3600 // 1 hour
 
 const POOL_CANDIDATES: PoolCandidate[] = [
   {
+    symbol0: 'TRX',
+    symbol1: 'SUN',
     token0: TRX_ADDRESS,
     token1: SUN_ADDRESS,
     token0Evm: toEvmHex(TRX_ADDRESS),
@@ -51,8 +53,12 @@ const POOL_CANDIDATES: PoolCandidate[] = [
     fee: DEFAULT_FEE,
     tickSpacing: DEFAULT_TICK_SPACING,
     hook: ZERO_HEX_ADDRESS,
+    token0Amount: 1n,
+    token1Amount: 59574n,
   },
   {
+    symbol0: 'TRX',
+    symbol1: 'USDCOLD',
     token0: TRX_ADDRESS,
     token1: USDC_ADDRESS,
     token0Evm: toEvmHex(TRX_ADDRESS),
@@ -62,8 +68,12 @@ const POOL_CANDIDATES: PoolCandidate[] = [
     fee: DEFAULT_FEE,
     tickSpacing: DEFAULT_TICK_SPACING,
     hook: ZERO_HEX_ADDRESS,
+    token0Amount: 1n,
+    token1Amount: 150n,
   },
   {
+    symbol0: 'SUN',
+    symbol1: 'USDCOLD',
     token0: SUN_ADDRESS,
     token1: USDC_ADDRESS,
     token0Evm: toEvmHex(SUN_ADDRESS),
@@ -73,8 +83,12 @@ const POOL_CANDIDATES: PoolCandidate[] = [
     fee: DEFAULT_FEE_2,
     tickSpacing: DEFAULT_TICK_SPACING_2,
     hook: ZERO_HEX_ADDRESS,
+    token0Amount: 1n,
+    token1Amount: 30n,
   },
   {
+    symbol0: 'WIN',
+    symbol1: 'USDCOLD',
     token0: WIN_ADDRESS,
     token1: USDC_ADDRESS,
     token0Evm: toEvmHex(WIN_ADDRESS),
@@ -84,6 +98,53 @@ const POOL_CANDIDATES: PoolCandidate[] = [
     fee: DEFAULT_FEE_2,
     tickSpacing: DEFAULT_TICK_SPACING_2,
     hook: ZERO_HEX_ADDRESS,
+    token0Amount: 1n,
+    token1Amount: 17n,
+  },
+  {
+    symbol0: 'TRX',
+    symbol1: 'USDT',
+    token0: TRX_ADDRESS,
+    token1: USDT_ADDRESS,
+    token0Evm: toEvmHex(TRX_ADDRESS),
+    token1Evm: toEvmHex(USDT_ADDRESS),
+    decimals0: 6,
+    decimals1: 6,
+    fee: DEFAULT_FEE,
+    tickSpacing: DEFAULT_TICK_SPACING,
+    hook: ZERO_HEX_ADDRESS,
+    token0Amount: 1n,
+    token1Amount: 533n,
+  },
+  {
+    symbol0: 'USDT',
+    symbol1: 'USDCOLD',
+    token0: USDT_ADDRESS,
+    token1: USDC_ADDRESS,
+    token0Evm: toEvmHex(USDT_ADDRESS),
+    token1Evm: toEvmHex(USDC_ADDRESS),
+    decimals0: 6,
+    decimals1: 6,
+    fee: DEFAULT_FEE,
+    tickSpacing: DEFAULT_TICK_SPACING,
+    hook: ZERO_HEX_ADDRESS,
+    token0Amount: 1n,
+    token1Amount: 1n,
+  },
+  {
+    symbol0: 'USDT',
+    symbol1: 'WIN',
+    token0: USDT_ADDRESS,
+    token1: WIN_ADDRESS,
+    token0Evm: toEvmHex(USDT_ADDRESS),
+    token1Evm: toEvmHex(WIN_ADDRESS),
+    decimals0: 6,
+    decimals1: 6,
+    fee: DEFAULT_FEE,
+    tickSpacing: DEFAULT_TICK_SPACING,
+    hook: ZERO_HEX_ADDRESS,
+    token0Amount: 17n,
+    token1Amount: 1n,
   },
 ]
 
@@ -263,8 +324,7 @@ function toRawAmount(human: string, decimals: number): string {
 async function calculatePoolId(poolKey: PoolKey): Promise<string> {
   try {
     // Create a simple deterministic ID
-    const concatenated =
-      poolKey.currency0 + poolKey.currency1 + poolKey.hooks + poolKey.poolManager + poolKey.fee + poolKey.parameters
+    const concatenated = poolKey.currency0 + poolKey.currency1 + poolKey.hooks + poolKey.fee + poolKey.parameters
     const hash = tronWeb.utils.ethersUtils.sha256(tronWeb.toHex(concatenated))
     return hash
   } catch (error: any) {
