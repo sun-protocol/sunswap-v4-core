@@ -2,7 +2,7 @@
 // Copyright (C) 2025 SunSwap
 pragma solidity ^0.8.0;
 
-import {Ownable} from "./base/Ownable.sol";
+import {Owner} from "./Owner.sol";
 import {Currency} from "./types/Currency.sol";
 import {IProtocolFeeController} from "./interfaces/IProtocolFeeController.sol";
 import {IProtocolFees} from "./interfaces/IProtocolFees.sol";
@@ -12,7 +12,7 @@ import {PoolId} from "./types/PoolId.sol";
 import {CustomRevert} from "./libraries/CustomRevert.sol";
 import {VaultReserve} from "./libraries/VaultReserve.sol";
 
-abstract contract ProtocolFees is IProtocolFees, Ownable {
+abstract contract ProtocolFees is IProtocolFees, Owner {
     using ProtocolFeeLibrary for uint24;
 
     /// @inheritdoc IProtocolFees
@@ -22,7 +22,7 @@ abstract contract ProtocolFees is IProtocolFees, Ownable {
     IProtocolFeeController public protocolFeeController;
 
 
-    constructor(address InitialOwner) Ownable(InitialOwner) {}
+    constructor(){}
 
     function _setProtocolFee(PoolId id, uint24 newProtocolFee) internal virtual;
 

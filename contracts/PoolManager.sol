@@ -52,7 +52,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
 
     uint256 public poolCount;   // to keep track of total number of pools
 
-    constructor() ProtocolFees(msg.sender) {}
+    constructor() {}
 
     /// @notice revert if no locker is set
     modifier isLocked() {
@@ -314,6 +314,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         isLocked 
         returns (BalanceDelta delta, BalanceDelta feeDelta) {
         // Do not allow add liquidity when paused()
+        if (params.liquidityDelta > 0 && paused()) revert PoolPaused();
         PoolId id = key.toId();
         CLPool.State storage pool = pools[id];
         pool.checkPoolInitialized();
@@ -347,6 +348,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         override
         noDelegateCall
         isLocked
+        whenNotPaused
         returns (BalanceDelta delta)
     {
         if (params.amountSpecified == 0) revert SwapAmountCannotBeZero();
@@ -401,6 +403,7 @@ contract PoolManager is IVault, VaultToken, ICLPoolManager, ProtocolFees, NoDele
         override
         noDelegateCall
         isLocked
+        whenNotPaused
         returns (BalanceDelta delta)
     {
         PoolId id = key.toId();

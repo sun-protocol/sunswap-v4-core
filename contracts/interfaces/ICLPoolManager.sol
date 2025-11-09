@@ -53,6 +53,7 @@ interface ICLPoolManager is IProtocolFees, IPoolManager, IExtsload {
     /// @param tickUpper The upper tick of the position
     /// @param liquidityDelta The amount of liquidity that was added or removed
     /// @param salt The value used to create a unique liquidity position
+    /// @param amountDelta token0/token1 used amount (int128)
     event ModifyLiquidity(
         PoolId indexed id, address indexed sender, int24 tickLower, int24 tickUpper, int256 liquidityDelta, bytes32 salt, BalanceDelta amountDelta
     );
