@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {PausableRole} from "../../src/base/PausableRole.sol";
+import {PausableRole} from "src/base/PausableRole.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable2Step.sol";
 
 contract PausableRoleImplemetation is PausableRole {}

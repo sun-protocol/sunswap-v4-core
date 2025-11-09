@@ -1302,14 +1302,13 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
             currency1: currency1,
             fee: 3000,
             hooks: IHooks(address(0)),
-
             parameters: bytes32(uint256(60) << 16)
         });
 
         poolManager.initialize(key, sqrtPriceX96);
 
         vm.expectEmit(true, true, true, true);
-        emit ICLPoolManager.ModifyLiquidity(key.toId(), address(router), 0, 60, 100, 0);
+        emit ICLPoolManager.ModifyLiquidity(key.toId(), address(router), 0, 60, 100, 0, toBalanceDelta(0, 0) );
 
         router.modifyPosition(
             key,
@@ -1332,7 +1331,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
 
         poolManager.initialize(key, sqrtPriceX96);
         vm.expectEmit(true, true, true, true);
-        emit ICLPoolManager.ModifyLiquidity(key.toId(), address(router), 0, 60, 100, 0);
+        emit ICLPoolManager.ModifyLiquidity(key.toId(), address(router), 0, 60, 100, 0, toBalanceDelta(type(int128).max, 0));
 
         router.modifyPosition{value: 100}(
             key,
@@ -1530,7 +1529,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
         mockHooks.setReturnValue(mockHooks.afterAddLiquidity.selector, mockHooks.afterAddLiquidity.selector);
 
         vm.expectEmit(true, true, true, true);
-        emit ICLPoolManager.ModifyLiquidity(key.toId(), address(router), 0, 60, 100, 0);
+        emit ICLPoolManager.ModifyLiquidity(key.toId(), address(router), 0, 60, 100, 0, toBalanceDelta(1,100));
 
         router.modifyPosition(key, params, ZERO_BYTES);
     }
@@ -2880,118 +2879,115 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
         assertEq(swapFee, _swapFee);
     }
 
-    // function testModifyLiquidity_Add_WhenPaused() public {
-    //     PoolKey memory key = PoolKey({
-    //         currency0: currency0,
-    //         currency1: currency1,
-    //         hooks: IHooks(address(0)),
-    //         poolManager: poolManager,
-    //         fee: uint24(3000),
-    //         parameters: bytes32(uint256(0x10000))
-    //     });
+    function testModifyLiquidity_Add_WhenPaused() public {
+        PoolKey memory key = PoolKey({
+            currency0: currency0,
+            currency1: currency1,
+            hooks: IHooks(address(0)),
+            fee: uint24(3000),
+            parameters: bytes32(uint256(0x10000))
+        });
 
-    //     poolManager.initialize(key, SQRT_RATIO_1_1);
-    //     IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
-    //     IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
+        poolManager.initialize(key, SQRT_RATIO_1_1);
+        IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
+        IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
 
-    //     // pause
-    //     poolManager.pause();
+        // pause
+        poolManager.pause();
 
-    //     vm.expectRevert(ICLPoolManager.PoolPaused.selector);
-    //     router.modifyPosition(
-    //         key,
-    //         ICLPoolManager.ModifyLiquidityParams({
-    //             tickLower: TickMath.MIN_TICK,
-    //             tickUpper: TickMath.MAX_TICK,
-    //             liquidityDelta: 1e24,
-    //             salt: 0
-    //         }),
-    //         ""
-    //     );
-    // }
+        vm.expectRevert(ICLPoolManager.PoolPaused.selector);
+        router.modifyPosition(
+            key,
+            ICLPoolManager.ModifyLiquidityParams({
+                tickLower: TickMath.MIN_TICK,
+                tickUpper: TickMath.MAX_TICK,
+                liquidityDelta: 1e24,
+                salt: 0
+            }),
+            ""
+        );
+    }
 
-    // function testModifyLiquidity_Remove_WhenPaused() public {
-    //     // make sure enough balance for the test
-    //     MockERC20(Currency.unwrap(currency0)).mint(address(this), 1e30 ether);
-    //     MockERC20(Currency.unwrap(currency1)).mint(address(this), 1e30 ether);
-    //     PoolKey memory key = PoolKey({
-    //         currency0: currency0,
-    //         currency1: currency1,
-    //         hooks: IHooks(address(0)),
-    //         poolManager: poolManager,
-    //         fee: uint24(3000),
-    //         parameters: bytes32(uint256(0x10000))
-    //     });
+    function testModifyLiquidity_Remove_WhenPaused() public {
+        // make sure enough balance for the test
+        MockERC20(Currency.unwrap(currency0)).mint(address(this), 1e30 ether);
+        MockERC20(Currency.unwrap(currency1)).mint(address(this), 1e30 ether);
+        PoolKey memory key = PoolKey({
+            currency0: currency0,
+            currency1: currency1,
+            hooks: IHooks(address(0)),
+            fee: uint24(3000),
+            parameters: bytes32(uint256(0x10000))
+        });
 
-    //     poolManager.initialize(key, SQRT_RATIO_1_1);
-    //     IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
-    //     IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
+        poolManager.initialize(key, SQRT_RATIO_1_1);
+        IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
+        IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
 
-    //     // pre-req add liquidity
-    //     router.modifyPosition(
-    //         key,
-    //         ICLPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: 1e24, salt: 0}),
-    //         ""
-    //     );
+        // pre-req add liquidity
+        router.modifyPosition(
+            key,
+            ICLPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: 1e24, salt: 0}),
+            ""
+        );
 
-    //     // pause
-    //     poolManager.pause();
+        // pause
+        poolManager.pause();
 
-    //     // verify no revert
-    //     router.modifyPosition(
-    //         key,
-    //         ICLPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: -1e24, salt: 0}),
-    //         ""
-    //     );
-    // }
+        // verify no revert
+        
+        router.modifyPosition(
+            key,
+            ICLPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: -1e24, salt: 0}),
+            ""
+        );
+    }
 
-    // function testSwap_WhenPaused() public {
-    //     PoolKey memory key = PoolKey({
-    //         currency0: currency0,
-    //         currency1: currency1,
-    //         hooks: IHooks(address(0)),
-    //         poolManager: poolManager,
-    //         fee: uint24(3000),
-    //         parameters: bytes32(uint256(0x10000))
-    //     });
+    function testSwap_WhenPaused() public {
+        PoolKey memory key = PoolKey({
+            currency0: currency0,
+            currency1: currency1,
+            hooks: IHooks(address(0)),
+            fee: uint24(3000),
+            parameters: bytes32(uint256(0x10000))
+        });
 
-    //     poolManager.initialize(key, SQRT_RATIO_1_1);
-    //     IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
-    //     IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
+        poolManager.initialize(key, SQRT_RATIO_1_1);
+        IERC20(Currency.unwrap(currency0)).approve(address(router), 1e10 ether);
+        IERC20(Currency.unwrap(currency1)).approve(address(router), 1e10 ether);
 
-    //     // pause
-    //     poolManager.pause();
+        // pause
+        poolManager.pause();
 
-    //     vm.expectRevert(Pausable.EnforcedPause.selector);
-    //     router.swap(
-    //         key,
-    //         ICLPoolManager.SwapParams({
-    //             zeroForOne: true,
-    //             amountSpecified: 0.1 ether,
-    //             sqrtPriceLimitX96: TickMath.MIN_SQRT_RATIO + 1
-    //         }),
-    //         CLPoolManagerRouter.SwapTestSettings({withdrawTokens: true, settleUsingTransfer: true}),
-    //         ""
-    //     );
-    // }
+        vm.expectRevert(Pausable.EnforcedPause.selector);
+        router.swap(
+            key,
+            ICLPoolManager.SwapParams({
+                zeroForOne: true,
+                amountSpecified: 0.1 ether,
+                sqrtPriceLimitX96: TickMath.MIN_SQRT_RATIO + 1
+            }),
+            CLPoolManagerRouter.SwapTestSettings({withdrawTokens: true, settleUsingTransfer: true}),
+            ""
+        );
+    }
 
-    // function testDonate_WhenPaused() public {
-    //     PoolKey memory key = PoolKey({
-    //         currency0: currency0,
-    //         currency1: currency1,
-    //         fee: 100,
-    //         hooks: IHooks(address(0)),
-    //         poolManager: poolManager,
-    //         parameters: bytes32(uint256(10 << 16))
-    //     });
-    //     poolManager.initialize(key, SQRT_RATIO_1_1);
+    function testDonate_WhenPaused() public {
+        PoolKey memory key = PoolKey({
+            currency0: currency0,
+            currency1: currency1,
+            fee: 100,
+            hooks: IHooks(address(0)),
+            parameters: bytes32(uint256(10 << 16))
+        });
+        poolManager.initialize(key, SQRT_RATIO_1_1);
 
-    //     // pause
-    //     poolManager.pause();
+        // pause
+        poolManager.pause();
 
-    //     vm.expectRevert(Pausable.EnforcedPause.selector);
-    //     router.donate(key, 100, 200, ZERO_BYTES);
-    // }
+        vm.expectRevert(Pausable.EnforcedPause.selector);
+        router.donate(key, 100, 200, ZERO_BYTES);
+    }
 
     function checkUnusedBitsAllZero(bytes32 params) internal pure returns (bool) {
         return
