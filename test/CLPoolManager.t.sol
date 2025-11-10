@@ -1306,8 +1306,8 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
         });
 
         poolManager.initialize(key, sqrtPriceX96);
-
-        vm.expectEmit(true, true, true, true);
+  // unknow  balanceDeltas ，as default false
+        vm.expectEmit(true, true, true, false);
         emit ICLPoolManager.ModifyLiquidity(key.toId(), address(router), 0, 60, 100, 0, toBalanceDelta(0, 0) );
 
         router.modifyPosition(
@@ -1330,7 +1330,8 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
         });
 
         poolManager.initialize(key, sqrtPriceX96);
-        vm.expectEmit(true, true, true, true);
+          // unknow  balanceDeltas ，as default false
+        vm.expectEmit(true, true, true, false);
         emit ICLPoolManager.ModifyLiquidity(key.toId(), address(router), 0, 60, 100, 0, toBalanceDelta(type(int128).max, 0));
 
         router.modifyPosition{value: 100}(
@@ -1527,8 +1528,8 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
 
         mockHooks.setReturnValue(mockHooks.beforeAddLiquidity.selector, mockHooks.beforeAddLiquidity.selector);
         mockHooks.setReturnValue(mockHooks.afterAddLiquidity.selector, mockHooks.afterAddLiquidity.selector);
-
-        vm.expectEmit(true, true, true, true);
+        // unknow  balanceDeltas ，as default false
+        vm.expectEmit(true, true, true, false);
         emit ICLPoolManager.ModifyLiquidity(key.toId(), address(router), 0, 60, 100, 0, toBalanceDelta(1,100));
 
         router.modifyPosition(key, params, ZERO_BYTES);
@@ -2935,7 +2936,7 @@ contract CLPoolManagerTest is Test, NoIsolate, Deployers, TokenFixture {
         poolManager.pause();
 
         // verify no revert
-        
+
         router.modifyPosition(
             key,
             ICLPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: -1e24, salt: 0}),
