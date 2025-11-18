@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 import {Test} from "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {TickMathTestHelper} from "../helpers/TickMathTestHelper.sol";
-import {TickMath} from "../../../src/libraries/TickMath.sol";
+import {TickMath} from "src/libraries/TickMath.sol";
 
 contract TickMathTestTest is Test {
     int24 constant MIN_TICK = -887272;

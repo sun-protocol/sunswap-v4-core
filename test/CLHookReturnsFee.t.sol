@@ -2,24 +2,24 @@
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
-import {IVault} from "../../src/interfaces/IVault.sol";
-import {PoolId} from "../../src/types/PoolId.sol";
-import {Hooks} from "../../src/libraries/Hooks.sol";
-import {LPFeeLibrary} from "../../src/libraries/LPFeeLibrary.sol";
-import {IProtocolFees} from "../../src/interfaces/IProtocolFees.sol";
-import {ICLHooks} from "../../src/interfaces/ICLHooks.sol";
-import {PoolKey} from "../../src/types/PoolKey.sol";
-import {PoolManager} from "../../src/PoolManager.sol";
-import {ICLPoolManager} from "../../src/interfaces/ICLPoolManager.sol";
+import {IVault} from "src/interfaces/IVault.sol";
+import {PoolId} from "src/types/PoolId.sol";
+import {Hooks} from "src/libraries/Hooks.sol";
+import {LPFeeLibrary} from "src/libraries/LPFeeLibrary.sol";
+import {IProtocolFees} from "src/interfaces/IProtocolFees.sol";
+import {ICLHooks} from "src/interfaces/ICLHooks.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
 import {Deployers} from "./helpers/Deployers.sol";
 import {CLDynamicReturnsFeeHook} from "./helpers/CLDynamicReturnsFeeHook.sol";
-import {Currency, CurrencyLibrary} from "../../src/types/Currency.sol";
+import {Currency, CurrencyLibrary} from "src/types/Currency.sol";
 import {MockERC20} from "solmate/src/test/utils/mocks/MockERC20.sol";
-import {FullMath} from "../../src/libraries/FullMath.sol";
-import {BalanceDelta} from "../../src/types/BalanceDelta.sol";
+import {FullMath} from "src/libraries/FullMath.sol";
+import {BalanceDelta} from "src/types/BalanceDelta.sol";
 import {TokenFixture} from "./helpers/TokenFixture.sol";
 import {CLPoolManagerRouter} from "./helpers/CLPoolManagerRouter.sol";
-import {CLPoolParametersHelper} from "../../src/libraries/CLPoolParametersHelper.sol";
+import {CLPoolParametersHelper} from "src/libraries/CLPoolParametersHelper.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CLHookReturnsFeeTest is Test, Deployers, TokenFixture {

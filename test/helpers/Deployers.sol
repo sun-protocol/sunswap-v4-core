@@ -2,18 +2,18 @@
 pragma solidity ^0.8.24;
 
 import {MockERC20} from "solmate/src/test/utils/mocks/MockERC20.sol";
-import {Hooks} from "../../../src/libraries/Hooks.sol";
-import {Currency} from "../../../src/types/Currency.sol";
-import {IHooks} from "../../../src/interfaces/IHooks.sol";
-import {ICLPoolManager} from "../../../src/interfaces/ICLPoolManager.sol";
-import {PoolManager} from "../../../src/PoolManager.sol";
-import {PoolId} from "../../../src/types/PoolId.sol";
-import {LPFeeLibrary} from "../../../src/libraries/LPFeeLibrary.sol";
-import {PoolKey} from "../../../src/types/PoolKey.sol";
+import {Hooks} from "src/libraries/Hooks.sol";
+import {Currency} from "src/types/Currency.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {PoolId} from "src/types/PoolId.sol";
+import {LPFeeLibrary} from "src/libraries/LPFeeLibrary.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
 import {Constants} from "./Constants.sol";
 import {SortTokens} from "./SortTokens.sol";
-import {IVault} from "../../../src/interfaces/IVault.sol";
-import {TickMath} from "../../../src/libraries/TickMath.sol";
+import {IVault} from "src/interfaces/IVault.sol";
+import {TickMath} from "src/libraries/TickMath.sol";
 
 contract Deployers {
     using LPFeeLibrary for uint24;

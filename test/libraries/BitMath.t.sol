@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {BitMath} from "../../../src/libraries/BitMath.sol";
+import {BitMath} from "src/libraries/BitMath.sol";
 
 contract BitMathTest is Test {
     function testMostSignificantBitZero() public {

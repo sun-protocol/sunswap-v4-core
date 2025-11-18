@@ -2,8 +2,8 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {LPFeeLibrary} from "../../src/libraries/LPFeeLibrary.sol";
-import {ProtocolFeeLibrary} from "../../src/libraries/ProtocolFeeLibrary.sol";
+import {LPFeeLibrary} from "src/libraries/LPFeeLibrary.sol";
+import {ProtocolFeeLibrary} from "src/libraries/ProtocolFeeLibrary.sol";
 
 contract ProtocolFeeLibraryTest is Test {
     function test_getZeroForOneFee() public pure {

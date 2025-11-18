@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {BipsLibrary} from "../../src/libraries/BipsLibrary.sol";
+import {BipsLibrary} from "src/libraries/BipsLibrary.sol";
 
 contract BipsLibraryTest is Test {
     using BipsLibrary for uint256;

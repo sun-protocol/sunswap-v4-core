@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {BalanceDelta, toBalanceDelta} from "../../src/types/BalanceDelta.sol";
+import {BalanceDelta, toBalanceDelta} from "src/types/BalanceDelta.sol";
 
 contract TestBalanceDelta is Test {
     function test_toBalanceDelta() public pure {

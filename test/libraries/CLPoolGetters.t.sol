@@ -2,9 +2,9 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {CLPoolGetters} from "../../../src/libraries/CLPoolGetters.sol";
-import {CLPool} from "../../../src/libraries/CLPool.sol";
-import {Tick} from "../../../src/libraries/Tick.sol";
+import {CLPoolGetters} from "src/libraries/CLPoolGetters.sol";
+import {CLPool} from "src/libraries/CLPool.sol";
+import {Tick} from "src/libraries/Tick.sol";
 
 contract CLPoolGettersTest is Test {
     CLPool.State pool;

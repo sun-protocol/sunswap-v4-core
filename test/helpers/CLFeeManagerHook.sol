@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-import {ICLPoolManager} from "../../../src/interfaces/ICLPoolManager.sol";
-import {ICLHooks} from "../../../src/interfaces/ICLHooks.sol";
-import {PoolKey} from "../../../src/types/PoolKey.sol";
-import {IHooks} from "../../../src/interfaces/IHooks.sol";
-import {PoolKey} from "../../../src/types/PoolKey.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
+import {ICLHooks} from "src/interfaces/ICLHooks.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
 import {BaseCLTestHook} from "./BaseCLTestHook.sol";
-import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "../../../src/types/BeforeSwapDelta.sol";
+import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "src/types/BeforeSwapDelta.sol";
 
 contract CLFeeManagerHook is BaseCLTestHook {
     uint16 bitmap;

@@ -2,10 +2,10 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {SwapMath} from "../../../src/libraries/SwapMath.sol";
-import {FixedPoint96} from "../../../src/libraries/FixedPoint96.sol";
+import {SwapMath} from "src/libraries/SwapMath.sol";
+import {FixedPoint96} from "src/libraries/FixedPoint96.sol";
 import {FixedPointMathLib} from "solmate/src/utils/FixedPointMathLib.sol";
-import {SqrtPriceMath} from "../../../src/libraries/SqrtPriceMath.sol";
+import {SqrtPriceMath} from "src/libraries/SqrtPriceMath.sol";
 
 contract SwapMathTest is Test {
     function testFuzz_getSqrtPriceTarget(bool zeroForOne, uint160 sqrtPriceNextX96, uint160 sqrtPriceLimitX96)

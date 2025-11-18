@@ -3,10 +3,10 @@ pragma solidity ^0.8.24;
 
 import {stdError} from "forge-std/StdError.sol";
 import {Test} from "forge-std/Test.sol";
-import {CLPosition} from "../../../src/libraries/CLPosition.sol";
-import {CLPool} from "../../../src/libraries/CLPool.sol";
-import {FixedPoint128} from "../../../src/libraries/FixedPoint128.sol";
-import {SafeCast} from "../../../src/libraries/SafeCast.sol";
+import {CLPosition} from "src/libraries/CLPosition.sol";
+import {CLPool} from "src/libraries/CLPool.sol";
+import {FixedPoint128} from "src/libraries/FixedPoint128.sol";
+import {SafeCast} from "src/libraries/SafeCast.sol";
 
 contract CLPositionTest is Test {
     using CLPosition for mapping(bytes32 => CLPosition.Info);

@@ -7,6 +7,7 @@ cache_path  = 'cache_forge'
 solc = "0.8.26"  # 确保使用支持 cancun 的版本
 evm_version = "cancun"
 via_ir = true
+optimizer = true
 ffi = true
 bytecode_hash = "none"
 cbor_metadata = false
@@ -25,7 +26,6 @@ remappings = [
     'forge-std/=lib/forge-std/src/',
     '@openzeppelin/=lib/openzeppelin-contracts/',
     'solmate/=lib/solmate/',
-    'pancake-create3-factory/=lib/pancake-create3-factory/',
     'src/=contracts/'
 ]
 # added due to v1.0 foundry

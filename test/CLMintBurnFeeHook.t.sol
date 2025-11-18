@@ -3,22 +3,22 @@ pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
 import {MockERC20} from "solmate/src/test/utils/mocks/MockERC20.sol";
-import {IVault} from "../src/interfaces/IVault.sol";
-import {IPoolManager} from "../src/interfaces/IPoolManager.sol";
-import {ICLPoolManager} from "../src/interfaces/ICLPoolManager.sol";
-import {PoolManager} from "../src/PoolManager.sol";
-import {CLPool} from "../src/libraries/CLPool.sol";
-import {Currency, CurrencyLibrary} from "../src/types/Currency.sol";
-import {PoolKey} from "../src/types/PoolKey.sol";
-import {IHooks} from "../src/interfaces/IHooks.sol";
-import {Hooks} from "../src/libraries/Hooks.sol";
+import {IVault} from "src/interfaces/IVault.sol";
+import {IPoolManager} from "src/interfaces/IPoolManager.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {CLPool} from "src/libraries/CLPool.sol";
+import {Currency, CurrencyLibrary} from "src/types/Currency.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {Hooks} from "src/libraries/Hooks.sol";
 import {CLPoolManagerRouter} from "./helpers/CLPoolManagerRouter.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Deployers} from "./helpers/Deployers.sol";
 import {TokenFixture} from "./helpers/TokenFixture.sol";
-import {CLPoolParametersHelper} from "../src/libraries/CLPoolParametersHelper.sol";
+import {CLPoolParametersHelper} from "src/libraries/CLPoolParametersHelper.sol";
 import {CLMintBurnFeeHook} from "./helpers/CLMintBurnFeeHook.sol";
-import {BalanceDelta} from "../src/types/BalanceDelta.sol";
+import {BalanceDelta} from "src/types/BalanceDelta.sol";
 
 contract CLMintBurnFeeHookTest is Test, Deployers, TokenFixture {
     using CLPoolParametersHelper for bytes32;

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-import {SettlementGuard} from "../../src/libraries/SettlementGuard.sol";
-import {IVault} from "../../src/interfaces/IVault.sol";
-import {Currency} from "../../src/types/Currency.sol";
+import {SettlementGuard} from "src/libraries/SettlementGuard.sol";
+import {IVault} from "src/interfaces/IVault.sol";
+import {Currency} from "src/types/Currency.sol";
 
 import "forge-std/Test.sol";
 

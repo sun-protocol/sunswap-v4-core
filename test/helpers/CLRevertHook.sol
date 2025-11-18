@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-import {PoolKey} from "../../../src/types/PoolKey.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
 import {BaseCLTestHook} from "./BaseCLTestHook.sol";
 
 contract CLRevertHook is BaseCLTestHook {

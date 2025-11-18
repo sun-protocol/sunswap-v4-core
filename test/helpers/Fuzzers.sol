@@ -5,15 +5,15 @@ import {Vm} from "forge-std/Vm.sol";
 import {StdUtils} from "forge-std/StdUtils.sol";
 
 import {CLPoolManagerRouter} from "./CLPoolManagerRouter.sol";
-import {ICLPoolManager} from "../../../src/interfaces/ICLPoolManager.sol";
-import {PoolKey} from "../../../src/types/PoolKey.sol";
-import {BalanceDelta} from "../../../src/types/BalanceDelta.sol";
-import {TickMath} from "../../../src/libraries/TickMath.sol";
-import {CLPool} from "../../../src/libraries/CLPool.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {BalanceDelta} from "src/types/BalanceDelta.sol";
+import {TickMath} from "src/libraries/TickMath.sol";
+import {CLPool} from "src/libraries/CLPool.sol";
 import {LiquidityAmounts} from "./LiquidityAmounts.sol";
-import {SafeCast} from "../../../src/libraries/SafeCast.sol";
-import {Tick} from "../../../src/libraries/Tick.sol";
-import {CLPoolParametersHelper} from "../../../src/libraries/CLPoolParametersHelper.sol";
+import {SafeCast} from "src/libraries/SafeCast.sol";
+import {Tick} from "src/libraries/Tick.sol";
+import {CLPoolParametersHelper} from "src/libraries/CLPoolParametersHelper.sol";
 
 contract Fuzzers is StdUtils {
     using SafeCast for uint256;

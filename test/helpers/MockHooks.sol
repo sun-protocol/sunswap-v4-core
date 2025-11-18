@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-import {Hooks} from "../../../src/libraries/Hooks.sol";
-import {ICLHooks} from "../../../src/interfaces/ICLHooks.sol";
-import {ICLPoolManager} from "../../../src/interfaces/ICLPoolManager.sol";
-import {PoolKey} from "../../../src/types/PoolKey.sol";
-import {BalanceDelta, BalanceDeltaLibrary} from "../../../src/types/BalanceDelta.sol";
-import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "../../../src/types/BeforeSwapDelta.sol";
-import {PoolId} from "../../../src/types/PoolId.sol";
+import {Hooks} from "src/libraries/Hooks.sol";
+import {ICLHooks} from "src/interfaces/ICLHooks.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {BalanceDelta, BalanceDeltaLibrary} from "src/types/BalanceDelta.sol";
+import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "src/types/BeforeSwapDelta.sol";
+import {PoolId} from "src/types/PoolId.sol";
 
 contract MockHooks is ICLHooks {
     using Hooks for ICLHooks;

@@ -3,11 +3,11 @@ pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
 import {MockERC20, ERC20} from "solmate/src/test/utils/mocks/MockERC20.sol";
-import {Currency, CurrencyLibrary} from "../../src/types/Currency.sol";
+import {Currency, CurrencyLibrary} from "src/types/Currency.sol";
 import {TokenRejecter} from "../helpers/TokenRejecter.sol";
 import {TokenSender} from "../helpers/TokenSender.sol";
 import {stdError} from "forge-std/StdError.sol";
-import {CustomRevert} from "../../src/libraries/CustomRevert.sol";
+import {CustomRevert} from "src/libraries/CustomRevert.sol";
 
 contract TestCurrency is Test {
     using CurrencyLibrary for uint256;

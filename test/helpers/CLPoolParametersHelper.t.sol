@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {CLPoolParametersHelper} from "../../../src/libraries/CLPoolParametersHelper.sol";
+import {CLPoolParametersHelper} from "src/libraries/CLPoolParametersHelper.sol";
 
 contract CLPoolParametersHelperTest is Test {
     using CLPoolParametersHelper for bytes32;

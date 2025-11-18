@@ -2,11 +2,11 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {PoolManager} from "../src/PoolManager.sol";
-import {IVault} from "../src/interfaces/IVault.sol";
-import {ICLPoolManager} from "../src/interfaces/ICLPoolManager.sol";
-import {IProtocolFeeController} from "../src/interfaces/IProtocolFeeController.sol";
-import {Extsload} from "../src/Extsload.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {IVault} from "src/interfaces/IVault.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
+import {IProtocolFeeController} from "src/interfaces/IProtocolFeeController.sol";
+import {Extsload} from "src/Extsload.sol";
 
 contract Loadable is Extsload {}
 
@@ -29,25 +29,29 @@ contract ExtsloadTest is Test {
         poolManager.setProtocolFeeController(IProtocolFeeController(address(0xabcd)));
     }
 
-    // function testExtsload() public {
-    //     bytes32 slot0 = poolManager.extsload(0x00);
-    //     vm.snapshotGasLastCall("extsload");
-    //     assertEq(abi.encode(slot0), abi.encode(address(this))); // owner
+    // poolmanagerStorage.png
 
-    //     bytes32 slot2 = poolManager.extsload(bytes32(uint256(0x03)));
-    //     assertEq(abi.encode(slot2), abi.encode(address(0xabcd))); // protocolFeeController
-    // }
+    function testExtsload() public {
+        bytes32[] memory slots = new bytes32[](1);
+        slots[0] = bytes32(uint256(0x03));
+        bytes32 slot3 = poolManager.extsload(slots[0]);
+        vm.snapshotGasLastCall("extsload");
+        assertEq(abi.encode(slot3), abi.encode(address(this))); // owner
 
-    // function testExtsloadInBatch() public {
-    //     bytes32[] memory slots = new bytes32[](2);
-    //     slots[0] = 0x00;
-    //     slots[1] = bytes32(uint256(0x03));
-    //     slots = poolManager.extsload(slots);
-    //     vm.snapshotGasLastCall("extsloadInBatch");
+        bytes32 slot6 = poolManager.extsload(bytes32(uint256(0x06)));
+        assertEq(abi.encode(slot6), abi.encode(address(0xabcd))); // protocolFeeController
+    }
 
-    //     assertEq(abi.encode(slots[0]), abi.encode(address(this)));
-    //     assertEq(abi.encode(slots[1]), abi.encode(address(0xabcd)));
-    // }
+    function testExtsloadInBatch() public {
+        bytes32[] memory slots = new bytes32[](2);
+        slots[0] = bytes32(uint256(0x03));
+        slots[1] = bytes32(uint256(0x06));
+        slots = poolManager.extsload(slots);
+        vm.snapshotGasLastCall("extsloadInBatch");
+
+        assertEq(abi.encode(slots[0]), abi.encode(address(this)));
+        assertEq(abi.encode(slots[1]), abi.encode(address(0xabcd)));
+    }
 
     function testExtsload_10_sparse() public {
         bytes32[] memory keys = new bytes32[](10);
@@ -63,7 +67,11 @@ contract ExtsloadTest is Test {
         }
     }
 
-    function testFuzz_extsload(uint256 length, uint256 seed, bytes memory dirtyBits) public {
+    function testFuzz_extsload(
+        uint256 length,
+        uint256 seed,
+        bytes memory dirtyBits
+    ) public {
         length = bound(length, 0, 1000);
 
         bytes32[] memory slots = new bytes32[](length);

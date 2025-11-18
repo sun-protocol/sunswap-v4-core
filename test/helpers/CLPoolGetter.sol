@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-import {PoolManager} from "../../../src/PoolManager.sol";
-import {PoolId, PoolIdLibrary} from "../../../src/types/PoolId.sol";
-import {CLPool} from "../../../src/libraries/CLPool.sol";
-import {CLSlot0} from "../../../src/types/CLSlot0.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {PoolId, PoolIdLibrary} from "src/types/PoolId.sol";
+import {CLPool} from "src/libraries/CLPool.sol";
+import {CLSlot0} from "src/types/CLSlot0.sol";
 
 library CLPoolGetter {
     function pools(PoolManager manager, PoolId id)

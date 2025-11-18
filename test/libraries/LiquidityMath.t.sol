@@ -3,8 +3,8 @@ pragma solidity ^0.8.24;
 
 import {stdError} from "forge-std/StdError.sol";
 import {Test} from "forge-std/Test.sol";
-import {SafeCast} from "../../../src/libraries/SafeCast.sol";
-import {LiquidityMath} from "../../../src/libraries/LiquidityMath.sol";
+import {SafeCast} from "src/libraries/SafeCast.sol";
+import {LiquidityMath} from "src/libraries/LiquidityMath.sol";
 
 contract LiquidityMathTest is Test {
     function testAddDelta() public {

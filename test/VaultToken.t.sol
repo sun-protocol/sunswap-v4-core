@@ -2,8 +2,8 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {VaultToken} from "../src/VaultToken.sol";
-import {Currency} from "../src/types/Currency.sol";
+import {VaultToken} from "src/VaultToken.sol";
+import {Currency} from "src/types/Currency.sol";
 
 contract MockVaultToken is VaultToken {
     function mint(address receiver, Currency currency, uint256 amount) public virtual {

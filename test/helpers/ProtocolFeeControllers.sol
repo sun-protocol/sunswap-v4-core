@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-import {IProtocolFeeController} from "../../../src/interfaces/IProtocolFeeController.sol";
-import {PoolId} from "../../../src/types/PoolId.sol";
-import {PoolKey} from "../../../src/types/PoolKey.sol";
+import {IProtocolFeeController} from "src/interfaces/IProtocolFeeController.sol";
+import {PoolId} from "src/types/PoolId.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
 
 contract MockProtocolFeeController is IProtocolFeeController {
     mapping(PoolId => uint24) public swapFeeForPool;

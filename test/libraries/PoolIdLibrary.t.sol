@@ -3,11 +3,11 @@ pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
 
-import {Currency} from "../../src/types/Currency.sol";
-import {PoolKey} from "../../src/types/PoolKey.sol";
-import {PoolId} from "../../src/types/PoolId.sol";
-import {IHooks} from "../../src/interfaces/IHooks.sol";
-import {IPoolManager} from "../../src/interfaces/IPoolManager.sol";
+import {Currency} from "src/types/Currency.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {PoolId} from "src/types/PoolId.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {IPoolManager} from "src/interfaces/IPoolManager.sol";
 
 contract PoolIdLibraryTest is Test {
     function test_toId() public {

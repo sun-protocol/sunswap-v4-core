@@ -4,9 +4,9 @@ pragma solidity ^0.8.24;
 import {Test} from "forge-std/Test.sol";
 import {stdError} from "forge-std/StdError.sol";
 import {Constants} from "../helpers/Constants.sol";
-import {CLPool} from "../../../src/libraries/CLPool.sol";
-import {TickMath} from "../../../src/libraries/TickMath.sol";
-import {Tick} from "../../../src/libraries/Tick.sol";
+import {CLPool} from "src/libraries/CLPool.sol";
+import {TickMath} from "src/libraries/TickMath.sol";
+import {Tick} from "src/libraries/Tick.sol";
 
 contract TickTest is Test {
     // using CLPool for CLPool.State;

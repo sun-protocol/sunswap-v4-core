@@ -4,15 +4,15 @@ pragma solidity ^0.8.20;
 import {Test} from "forge-std/Test.sol";
 import {MockERC20} from "solmate/src/test/utils/mocks/MockERC20.sol";
 
-import {Currency, CurrencyLibrary} from "../../src/types/Currency.sol";
+import {Currency, CurrencyLibrary} from "src/types/Currency.sol";
 import {TokenFixture} from "../helpers/TokenFixture.sol";
 import {NoIsolate} from "../helpers/NoIsolate.sol";
-import {VaultReserve} from "../../src/libraries/VaultReserve.sol";
-import {PoolKey} from "../../src/types/PoolKey.sol";
-import {IHooks} from "../../src/interfaces/IHooks.sol";
+import {VaultReserve} from "src/libraries/VaultReserve.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
 import {NativeERC20} from "../helpers/NativeERC20.sol";
-import {PoolManager} from "../../../src/PoolManager.sol";
-import {IVault} from "../../src/interfaces/IVault.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {IVault} from "src/interfaces/IVault.sol";
 
 contract VaultSyncTest is Test, TokenFixture, NoIsolate {
     PoolManager public vault;

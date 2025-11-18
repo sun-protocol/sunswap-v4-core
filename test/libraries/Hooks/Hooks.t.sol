@@ -2,13 +2,13 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {Hooks} from "../../../src/libraries/Hooks.sol";
-import {IHooks} from "../../../src/interfaces/IHooks.sol";
-import {IPoolManager} from "../../../src/interfaces/IPoolManager.sol";
-import {Currency} from "../../../src/types/Currency.sol";
-import {PoolKey} from "../../../src/types/PoolKey.sol";
+import {Hooks} from "src/libraries/Hooks.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {IPoolManager} from "src/interfaces/IPoolManager.sol";
+import {Currency} from "src/types/Currency.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
 import {HooksContract} from "./HooksContract.sol";
-import {LPFeeLibrary} from "../../../src/libraries/LPFeeLibrary.sol";
+import {LPFeeLibrary} from "src/libraries/LPFeeLibrary.sol";
 
 contract HooksTest is Test {
     /// @dev trick to convert poolKey to calldata

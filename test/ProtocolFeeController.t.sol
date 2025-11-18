@@ -2,24 +2,24 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {PoolManager} from "../src/PoolManager.sol";
-import {ProtocolFeeController} from "../src/ProtocolFeeController.sol";
-import {PoolKey} from "../src/types/PoolKey.sol";
-import {LPFeeLibrary} from "../src/libraries/LPFeeLibrary.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {ProtocolFeeController} from "src/ProtocolFeeController.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {LPFeeLibrary} from "src/libraries/LPFeeLibrary.sol";
 import {TokenFixture} from "./helpers/TokenFixture.sol";
 import {Constants} from "../test/helpers/Constants.sol";
-import {IHooks} from "../src/interfaces/IHooks.sol";
-import {CLPoolParametersHelper} from "../src/libraries/CLPoolParametersHelper.sol";
-import {ProtocolFeeLibrary} from "../src/libraries/ProtocolFeeLibrary.sol";
-import {IPoolManager} from "../src/interfaces/IPoolManager.sol";
-import {IProtocolFees} from "../src/interfaces/IProtocolFees.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {CLPoolParametersHelper} from "src/libraries/CLPoolParametersHelper.sol";
+import {ProtocolFeeLibrary} from "src/libraries/ProtocolFeeLibrary.sol";
+import {IPoolManager} from "src/interfaces/IPoolManager.sol";
+import {IProtocolFees} from "src/interfaces/IProtocolFees.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {CLPoolManagerRouter} from "./helpers/CLPoolManagerRouter.sol";
-import {ICLPoolManager} from "../src/interfaces/ICLPoolManager.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {Currency} from "../src/types/Currency.sol";
-import {TickMath} from "../src/libraries/TickMath.sol";
-import {BalanceDelta} from "../src/types/BalanceDelta.sol";
+import {Currency} from "src/types/Currency.sol";
+import {TickMath} from "src/libraries/TickMath.sol";
+import {BalanceDelta} from "src/types/BalanceDelta.sol";
 import {HooksContract} from "./libraries/Hooks/HooksContract.sol";
 
 contract ProtocolFeeControllerTest is Test, TokenFixture {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-import {IERC20Minimal} from "../../../src/interfaces/IERC20Minimal.sol";
+import {IERC20Minimal} from "src/interfaces/IERC20Minimal.sol";
 
 // Regular ERC20 but it doesn't return true on transfer.
 contract NonStandardERC20 is IERC20Minimal {

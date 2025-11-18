@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
-import {UnsafeMath} from "../../../src/libraries/math/UnsafeMath.sol";
+import {UnsafeMath} from "src/libraries/math/UnsafeMath.sol";
 
 contract UnsafeMathTest is Test {
     using UnsafeMath for uint256;

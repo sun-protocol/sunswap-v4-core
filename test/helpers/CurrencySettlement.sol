@@ -2,9 +2,9 @@
 // Copyright (C) 2025 SunSwap
 pragma solidity ^0.8.24;
 
-import {Currency} from "../../src/types/Currency.sol";
-import {IVault} from "../../src/interfaces/IVault.sol";
-import {IERC20Minimal} from "../../src/interfaces/IERC20Minimal.sol";
+import {Currency} from "src/types/Currency.sol";
+import {IVault} from "src/interfaces/IVault.sol";
+import {IERC20Minimal} from "src/interfaces/IERC20Minimal.sol";
 
 /// @notice Helper library for currency settlement
 /// @dev It is advised to consider referencing this library for currency settlement

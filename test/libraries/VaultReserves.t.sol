@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
-import {VaultReserve} from "../../src/libraries/VaultReserve.sol";
+import {VaultReserve} from "src/libraries/VaultReserve.sol";
 import {Test} from "forge-std/Test.sol";
-import {Currency, CurrencyLibrary} from "../../src/types/Currency.sol";
+import {Currency, CurrencyLibrary} from "src/types/Currency.sol";
 
 contract VaultReserveTest is Test {
     Currency currency0;

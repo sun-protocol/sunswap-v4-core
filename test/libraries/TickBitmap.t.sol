@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
-import {TickBitmap} from "../../../src/libraries/TickBitmap.sol";
+import {TickBitmap} from "src/libraries/TickBitmap.sol";
 
 contract TickBitmapTest is Test {
     using TickBitmap for mapping(int16 => uint256);

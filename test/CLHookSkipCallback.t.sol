@@ -2,22 +2,22 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {IVault} from "../../src/interfaces/IVault.sol";
-import {IPoolManager} from "../../src/interfaces/IPoolManager.sol";
-import {ICLPoolManager} from "../../src/interfaces/ICLPoolManager.sol";
-import {PoolManager} from "../../src/PoolManager.sol";
-import {CLPool} from "../../src/libraries/CLPool.sol";
-import {Currency, CurrencyLibrary} from "../../src/types/Currency.sol";
-import {PoolKey} from "../../src/types/PoolKey.sol";
-import {IHooks} from "../../src/interfaces/IHooks.sol";
-import {Hooks} from "../../src/libraries/Hooks.sol";
+import {IVault} from "src/interfaces/IVault.sol";
+import {IPoolManager} from "src/interfaces/IPoolManager.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {CLPool} from "src/libraries/CLPool.sol";
+import {Currency, CurrencyLibrary} from "src/types/Currency.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {Hooks} from "src/libraries/Hooks.sol";
 import {CLPoolManagerRouter} from "./helpers/CLPoolManagerRouter.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Deployers} from "./helpers/Deployers.sol";
 import {TokenFixture} from "./helpers/TokenFixture.sol";
-import {LPFeeLibrary} from "../../src/libraries/LPFeeLibrary.sol";
-import {CLPoolParametersHelper} from "../../src/libraries/CLPoolParametersHelper.sol";
-import {ParametersHelper} from "../../src/libraries/math/ParametersHelper.sol";
+import {LPFeeLibrary} from "src/libraries/LPFeeLibrary.sol";
+import {CLPoolParametersHelper} from "src/libraries/CLPoolParametersHelper.sol";
+import {ParametersHelper} from "src/libraries/math/ParametersHelper.sol";
 import {CLSkipCallbackHook} from "./helpers/CLSkipCallbackHook.sol";
 
 contract CLHookSkipCallbackTest is Test, Deployers, TokenFixture {

@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 import "forge-std/console.sol";
 import {Test} from "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
-import {SqrtPriceMath} from "../../../src/libraries/SqrtPriceMath.sol";
+import {SqrtPriceMath} from "src/libraries/SqrtPriceMath.sol";
 import {Constants} from "../helpers/Constants.sol";
 
 contract SqrtPriceMathTest is Test {

@@ -3,17 +3,17 @@ pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
 import {MockERC20} from "solmate/src/test/utils/mocks/MockERC20.sol";
-import {Currency, CurrencyLibrary} from "../../src/types/Currency.sol";
-import {PoolKey} from "../../src/types/PoolKey.sol";
-import {ILockCallback} from "../../src/interfaces/ILockCallback.sol";
-import {SettlementGuard} from "../../src/libraries/SettlementGuard.sol";
-import {IVault} from "../../src/interfaces/IVault.sol";
-import {IHooks} from "../../src/interfaces/IHooks.sol";
-import {toBalanceDelta} from "../../src/types/BalanceDelta.sol";
-import {SafeCast} from "../../src/libraries/SafeCast.sol";
-import {IPoolManager} from "../../src/interfaces/IPoolManager.sol";
+import {Currency, CurrencyLibrary} from "src/types/Currency.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {ILockCallback} from "src/interfaces/ILockCallback.sol";
+import {SettlementGuard} from "src/libraries/SettlementGuard.sol";
+import {IVault} from "src/interfaces/IVault.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {toBalanceDelta} from "src/types/BalanceDelta.sol";
+import {SafeCast} from "src/libraries/SafeCast.sol";
+import {IPoolManager} from "src/interfaces/IPoolManager.sol";
 import {TokenFixture} from "../helpers/TokenFixture.sol";
-import {PoolManager} from "../../../src/PoolManager.sol";
+import {PoolManager} from "src/PoolManager.sol";
 
 contract TokenLocker is ILockCallback {
     address public tester;

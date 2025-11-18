@@ -5,20 +5,20 @@ import "forge-std/Test.sol";
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {TokenFixture} from "../helpers/TokenFixture.sol";
-import {PoolKey} from "../../../src/types/PoolKey.sol";
-import {LPFeeLibrary} from "../../../src/libraries/LPFeeLibrary.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {LPFeeLibrary} from "src/libraries/LPFeeLibrary.sol";
 import {CLFeeManagerHook} from "../helpers/CLFeeManagerHook.sol";
 import {Deployers} from "../helpers/Deployers.sol";
-import {PoolManager} from "../../../src/PoolManager.sol";
-import {CLPoolParametersHelper} from "../../../src/libraries/CLPoolParametersHelper.sol";
-import {IProtocolFees} from "../../../src/interfaces/IProtocolFees.sol";
-import {ICLPoolManager} from "../../../src/interfaces/ICLPoolManager.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {CLPoolParametersHelper} from "src/libraries/CLPoolParametersHelper.sol";
+import {IProtocolFees} from "src/interfaces/IProtocolFees.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
 import {CLPoolManagerRouter} from "../helpers/CLPoolManagerRouter.sol";
-import {Currency} from "../../../src/types/Currency.sol";
-import {FixedPoint96} from "../../../src/libraries/FixedPoint96.sol";
-import {HOOKS_AFTER_INITIALIZE_OFFSET, HOOKS_BEFORE_SWAP_OFFSET} from "../../../src/interfaces/ICLHooks.sol";
-import {IHooks} from "../../../src/interfaces/IHooks.sol";
-import {Hooks} from "../../../src/libraries/Hooks.sol";
+import {Currency} from "src/types/Currency.sol";
+import {FixedPoint96} from "src/libraries/FixedPoint96.sol";
+import {HOOKS_AFTER_INITIALIZE_OFFSET, HOOKS_BEFORE_SWAP_OFFSET} from "src/interfaces/ICLHooks.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {Hooks} from "src/libraries/Hooks.sol";
 
 contract CLPoolSwapFeeTest is Deployers, TokenFixture, Test {
     PoolManager poolManager;

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {MockERC20} from "solmate/src/test/utils/mocks/MockERC20.sol";
-import {Currency} from "../../src/types/Currency.sol";
+import {Currency} from "src/types/Currency.sol";
 
 library SortTokens {
     function sort(MockERC20 tokenA, MockERC20 tokenB)

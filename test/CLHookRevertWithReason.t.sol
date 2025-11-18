@@ -2,22 +2,22 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import {IPoolManager} from "../../src/interfaces/IPoolManager.sol";
-import {PoolManager} from "../../src/PoolManager.sol";
-import {CLPool} from "../../src/libraries/CLPool.sol";
-import {Currency, CurrencyLibrary} from "../../src/types/Currency.sol";
-import {PoolKey} from "../../src/types/PoolKey.sol";
-import {PoolId, PoolIdLibrary} from "../../src/types/PoolId.sol";
-import {IHooks} from "../../src/interfaces/IHooks.sol";
-import {Hooks} from "../../src/libraries/Hooks.sol";
+import {IPoolManager} from "src/interfaces/IPoolManager.sol";
+import {PoolManager} from "src/PoolManager.sol";
+import {CLPool} from "src/libraries/CLPool.sol";
+import {Currency, CurrencyLibrary} from "src/types/Currency.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {PoolId, PoolIdLibrary} from "src/types/PoolId.sol";
+import {IHooks} from "src/interfaces/IHooks.sol";
+import {Hooks} from "src/libraries/Hooks.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Deployers} from "./helpers/Deployers.sol";
 import {TokenFixture} from "./helpers/TokenFixture.sol";
 import {CLRevertHook} from "./helpers/CLRevertHook.sol";
-import {CLPoolParametersHelper} from "../../src/libraries/CLPoolParametersHelper.sol";
+import {CLPoolParametersHelper} from "src/libraries/CLPoolParametersHelper.sol";
 import {BaseCLTestHook} from "./helpers/BaseCLTestHook.sol";
-import {CustomRevert} from "../../src/libraries/CustomRevert.sol";
-import {ICLHooks} from "../../src/interfaces/ICLHooks.sol";
+import {CustomRevert} from "src/libraries/CustomRevert.sol";
+import {ICLHooks} from "src/interfaces/ICLHooks.sol";
 
 /// @dev make sure the revert reason is bubbled up
 contract CLHookRevertWithReasonTest is Test, Deployers, TokenFixture {

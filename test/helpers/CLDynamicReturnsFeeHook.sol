@@ -2,11 +2,11 @@
 pragma solidity ^0.8.24;
 
 import {BaseCLTestHook} from "./BaseCLTestHook.sol";
-import {PoolKey} from "../../../src/types/PoolKey.sol";
-import {ICLPoolManager} from "../../../src/interfaces/ICLPoolManager.sol";
-import {ICLHooks} from "../../../src/interfaces/ICLHooks.sol";
-import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "../../../src/types/BeforeSwapDelta.sol";
-import {LPFeeLibrary} from "../../../src/libraries/LPFeeLibrary.sol";
+import {PoolKey} from "src/types/PoolKey.sol";
+import {ICLPoolManager} from "src/interfaces/ICLPoolManager.sol";
+import {ICLHooks} from "src/interfaces/ICLHooks.sol";
+import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "src/types/BeforeSwapDelta.sol";
+import {LPFeeLibrary} from "src/libraries/LPFeeLibrary.sol";
 
 contract CLDynamicReturnsFeeHook is BaseCLTestHook {
     using LPFeeLibrary for uint24;

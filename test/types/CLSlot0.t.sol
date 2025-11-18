@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
-import {CLSlot0, CLSlot0Library} from "../../../src/types/CLSlot0.sol";
+import {CLSlot0, CLSlot0Library} from "src/types/CLSlot0.sol";
 
 contract CLSlot0Test is Test {
     function test_slot0_constants_masks() public pure {
