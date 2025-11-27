@@ -1,0 +1,80 @@
+[
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "name": "quoteExactInputSingle",
+        "inputs": [
+            {
+                "name": "params",
+                "type": "tuple",
+                "internalType": "struct QuoteExactSingleParams",
+                "components": [
+                    {
+                        "name": "poolKey",
+                        "type": "tuple",
+                        "internalType": "struct PoolKey",
+                        "components": [
+                            {
+                                "name": "currency0",
+                                "type": "address",
+                                "internalType": "address"
+                            },
+                            {
+                                "name": "currency1",
+                                "type": "address",
+                                "internalType": "address"
+                            },
+                            {
+                                "name": "hooks",
+                                "type": "address",
+                                "internalType": "address"
+                            },
+                            {
+                                "name": "poolManager",
+                                "type": "address",
+                                "internalType": "address"
+                            },
+                            {
+                                "name": "fee",
+                                "type": "uint24",
+                                "internalType": "uint24"
+                            },
+                            {
+                                "name": "parameters",
+                                "type": "bytes32",
+                                "internalType": "bytes32"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "zeroForOne",
+                        "type": "bool",
+                        "internalType": "bool"
+                    },
+                    {
+                        "name": "exactAmount",
+                        "type": "uint128",
+                        "internalType": "uint128"
+                    },
+                    {
+                        "name": "hookData",
+                        "type": "bytes",
+                        "internalType": "bytes"
+                    }
+                ]
+            }
+        ],
+        "outputs": [
+            {
+                "name": "amountOut",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "gasEstimate",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ]
+    }
+]

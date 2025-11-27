@@ -1,0 +1,505 @@
+[
+    {
+        "inputs": [
+            {
+                "name": "deadline",
+                "type": "uint256"
+            }
+        ],
+        "name": "AllowanceExpired",
+        "type": "Error"
+    },
+    {
+        "name": "ExcessiveInvalidation",
+        "type": "Error"
+    },
+    {
+        "inputs": [
+            {
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "InsufficientAllowance",
+        "type": "Error"
+    },
+    {
+        "inputs": [
+            {
+                "name": "maxAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "InvalidAmount",
+        "type": "Error"
+    },
+    {
+        "name": "InvalidContractSignature",
+        "type": "Error"
+    },
+    {
+        "name": "InvalidNonce",
+        "type": "Error"
+    },
+    {
+        "name": "InvalidSignature",
+        "type": "Error"
+    },
+    {
+        "name": "InvalidSignatureLength",
+        "type": "Error"
+    },
+    {
+        "name": "InvalidSigner",
+        "type": "Error"
+    },
+    {
+        "name": "LengthMismatch",
+        "type": "Error"
+    },
+    {
+        "inputs": [
+            {
+                "name": "signatureDeadline",
+                "type": "uint256"
+            }
+        ],
+        "name": "SignatureExpired",
+        "type": "Error"
+    },
+    {
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint160"
+            },
+            {
+                "name": "expiration",
+                "type": "uint48"
+            }
+        ],
+        "name": "Approval",
+        "type": "Event"
+    },
+    {
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "name": "spender",
+                "type": "address"
+            }
+        ],
+        "name": "Lockdown",
+        "type": "Event"
+    },
+    {
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "name": "newNonce",
+                "type": "uint48"
+            },
+            {
+                "name": "oldNonce",
+                "type": "uint48"
+            }
+        ],
+        "name": "NonceInvalidation",
+        "type": "Event"
+    },
+    {
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint160"
+            },
+            {
+                "name": "expiration",
+                "type": "uint48"
+            },
+            {
+                "name": "nonce",
+                "type": "uint48"
+            }
+        ],
+        "name": "Permit",
+        "type": "Event"
+    },
+    {
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "name": "word",
+                "type": "uint256"
+            },
+            {
+                "name": "mask",
+                "type": "uint256"
+            }
+        ],
+        "name": "UnorderedNonceInvalidation",
+        "type": "Event"
+    },
+    {
+        "outputs": [
+            {
+                "type": "bytes32"
+            }
+        ],
+        "name": "DOMAIN_SEPARATOR",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "outputs": [
+            {
+                "name": "amount",
+                "type": "uint160"
+            },
+            {
+                "name": "expiration",
+                "type": "uint48"
+            },
+            {
+                "name": "nonce",
+                "type": "uint48"
+            }
+        ],
+        "inputs": [
+            {
+                "type": "address"
+            },
+            {
+                "type": "address"
+            },
+            {
+                "type": "address"
+            }
+        ],
+        "name": "allowance",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint160"
+            },
+            {
+                "name": "expiration",
+                "type": "uint48"
+            }
+        ],
+        "name": "approve",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "name": "newNonce",
+                "type": "uint48"
+            }
+        ],
+        "name": "invalidateNonces",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "wordPos",
+                "type": "uint256"
+            },
+            {
+                "name": "mask",
+                "type": "uint256"
+            }
+        ],
+        "name": "invalidateUnorderedNonces",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "approvals",
+                "type": "tuple[]"
+            }
+        ],
+        "name": "lockdown",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "outputs": [
+            {
+                "type": "uint256"
+            }
+        ],
+        "inputs": [
+            {
+                "type": "address"
+            },
+            {
+                "type": "uint256"
+            }
+        ],
+        "name": "nonceBitmap",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "name": "permitBatch",
+                "type": "tuple"
+            },
+            {
+                "name": "signature",
+                "type": "bytes"
+            }
+        ],
+        "name": "permit",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "name": "permitSingle",
+                "type": "tuple"
+            },
+            {
+                "name": "signature",
+                "type": "bytes"
+            }
+        ],
+        "name": "permit",
+        "stateMutability": "Nonpayable",
+        "type": "Function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "permit",
+                "type": "tuple"
+            },
+            {
+                "name": "transferDetails",
+                "type": "tuple"
+            },
+            {
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "name": "signature",
+                "type": "bytes"
+            }
+        ],
+        "name": "permitTransferFrom",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "permit",
+                "type": "tuple"
+            },
+            {
+                "name": "transferDetails",
+                "type": "tuple[]"
+            },
+            {
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "name": "signature",
+                "type": "bytes"
+            }
+        ],
+        "name": "permitTransferFrom",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "permit",
+                "type": "tuple"
+            },
+            {
+                "name": "transferDetails",
+                "type": "tuple"
+            },
+            {
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "name": "witness",
+                "type": "bytes32"
+            },
+            {
+                "name": "witnessTypeString",
+                "type": "string"
+            },
+            {
+                "name": "signature",
+                "type": "bytes"
+            }
+        ],
+        "name": "permitWitnessTransferFrom",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "permit",
+                "type": "tuple"
+            },
+            {
+                "name": "transferDetails",
+                "type": "tuple[]"
+            },
+            {
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "name": "witness",
+                "type": "bytes32"
+            },
+            {
+                "name": "witnessTypeString",
+                "type": "string"
+            },
+            {
+                "name": "signature",
+                "type": "bytes"
+            }
+        ],
+        "name": "permitWitnessTransferFrom",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "transferDetails",
+                "type": "tuple[]"
+            }
+        ],
+        "name": "transferFrom",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint160"
+            },
+            {
+                "name": "token",
+                "type": "address"
+            }
+        ],
+        "name": "transferFrom",
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
