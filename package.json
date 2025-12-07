@@ -23,7 +23,8 @@
     "deploy": "npx hardhat --network localhost deploy",
     "deploy-sepolia": "npx hardhat --network sepolia deploy",
     "deploy-tron": "npx hardhat --network tron deploy --tags lumi",
-    "deploy-tron2": "npx hardhat --network tron deploy --tags lumi2"
+    "deploy-tron2": "npx hardhat --network tron deploy --tags lumi2",
+    "postinstall": "forge install foundry-rs/forge-std@v1.12.0 && forge install OpenZeppelin/openzeppelin-contracts@v5.5.0 && forge install transmissions11/solmate@v6"
   },
   "dependencies": {
     "@pancakeswap/infinity-sdk": "^1.0.3",
