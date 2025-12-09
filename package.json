@@ -24,7 +24,7 @@
     "deploy-sepolia": "npx hardhat --network sepolia deploy",
     "deploy-tron": "npx hardhat --network tron deploy --tags lumi",
     "deploy-tron2": "npx hardhat --network tron deploy --tags lumi2",
-    "postinstall": "git clone https://github.com/foundry-rs/forge-std lib/forge-std && git clone https://github.com/OpenZeppelin/openzeppelin-contracts lib/openzeppelin-contracts && git clone https://github.com/transmissions11/solmate lib/solmate"
+    "postinstall": "git clone --branch v1.12.0 --depth 1 https://github.com/foundry-rs/forge-std lib/forge-std && git clone --branch v5.5.0 --depth 1 https://github.com/OpenZeppelin/openzeppelin-contracts lib/openzeppelin-contracts && git clone --branch v6 --depth 1 https://github.com/transmissions11/solmate lib/solmate"
   },
   "dependencies": {
     "@pancakeswap/infinity-sdk": "^1.0.3",
