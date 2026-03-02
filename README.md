@@ -1,5 +1,5 @@
-# sun-studio-demo
-sun-studio-demo
+# SunSwap V4 Core
+
 
 ## ENV
 
@@ -9,7 +9,7 @@ npm >= 10.9.2
 @sun-protocol/sun-studio >= 0.2.2
 
 ```
-## How To Use SunStudio
+## Compile, Test and Deploy
 
 ### Installation
 
@@ -27,14 +27,7 @@ You can compile using different versions of the Solidity and Vyper compilers sim
 ```
 solidity: {
     compilers: [ // different versions of the Solidity
-      { "version": "0.8.23", settings },
-      { "version": "0.8.22", settings },
-    ]
-  },
-  vyper: { 
-    compilers: [ // different versions of the Vyper
-      { "version": "0.2.8" },
-      { "version": "0.3.10" }
+      { "version": "0.8.26", settings },
     ]
   },
 ```
