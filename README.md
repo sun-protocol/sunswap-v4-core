@@ -2,9 +2,6 @@
 
 SunSwap V4 Core is the core contracts repository of the SunSwap protocol. It is built with Hardhat and Foundry, and supports development, testing, and deployment on Tron networks.
 
-
-## About
-
 SunSwap V4 Core is the foundational contract library of SunSwap V4, responsible for implementing the essential AMM logic and state management.  
 It separates accounting from execution, enabling a modular architecture where liquidity, swaps, and fee logic can be extended through external modules.  
 
