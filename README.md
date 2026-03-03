@@ -2,15 +2,28 @@
 
 SunSwap V4 Core is the core contracts repository of the SunSwap protocol. It is built with Hardhat and Foundry, and supports development, testing, and deployment on Tron networks.
 
+
+## About
+
+SunSwap V4 Core is the foundational contract library of SunSwap V4, responsible for implementing the essential AMM logic and state management.  
+It separates accounting from execution, enabling a modular architecture where liquidity, swaps, and fee logic can be extended through external modules.  
+
+Key responsibilities include:
+- **Vaults**: secure storage of assets and accounting of balances.  
+- **Pool Managers**: creation and management of liquidity pools with customizable parameters.  
+- **Hooks**: extension points that allow developers to add custom logic (e.g., dynamic fees, on-chain strategies) without modifying the core contracts.  
+
+By isolating the core AMM logic, SunSwap V4 Core ensures stability, security, and composability. This design allows developers to innovate on top of the protocol while maintaining a reliable foundation for liquidity management and trading.
+
+
 ## Deployments
 
-|contract |chain|address|
-|:---|:---|:---|
-|PoolManager|TRON|TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br|
-||NILE|TVivLPeq7FMmTG8Z7HaiBgHTsMwCEcipKT|
-|protocolFeeController|TRON|TEays9UfJn2EqKjkN7hWUWewBGpGxTzWEv|
-||NILE|TDch7PxQNbsuCQpzPd2LK7htR5qB3wvdtF|
-
+| contract              | chain        | address                            |
+| :-------------------- | :----------- | :--------------------------------- |
+| PoolManager           | TRON Mainnet | TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br |
+|                       | NILE Testnet | TVivLPeq7FMmTG8Z7HaiBgHTsMwCEcipKT |
+| protocolFeeController | TRON Mainnet | TEays9UfJn2EqKjkN7hWUWewBGpGxTzWEv |
+|                       | NILE Testnet | TDch7PxQNbsuCQpzPd2LK7htR5qB3wvdtF |
 
 ## Environment (ENV)
 
@@ -57,6 +70,12 @@ networks: {
     deploy: ["deploy/"],
   },
   tron: {
+    url: "https://trongrid.io/jsonrpc",
+    tron: true,
+    deploy: ["deployTron/"],
+    accounts: [`${process.env.PRIVATE_KEY}`],
+  },
+  nile: {
     url: "https://nile.trongrid.io/jsonrpc",
     tron: true,
     deploy: ["deployTron/"],
