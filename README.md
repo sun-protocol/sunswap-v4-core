@@ -12,6 +12,7 @@ Key responsibilities include:
 
 By isolating the core AMM logic, SunSwap V4 Core ensures stability, security, and composability. This design allows developers to innovate on top of the protocol while maintaining a reliable foundation for liquidity management and trading.
 
+---
 
 ## Deployments
 
@@ -22,6 +23,8 @@ By isolating the core AMM logic, SunSwap V4 Core ensures stability, security, an
 | protocolFeeController | TRON Mainnet | TEays9UfJn2EqKjkN7hWUWewBGpGxTzWEv |
 |                       | NILE Testnet | TDch7PxQNbsuCQpzPd2LK7htR5qB3wvdtF |
 
+---
+
 ## Environment (ENV)
 
 ```text
@@ -29,6 +32,8 @@ node >= v22.14.0
 npm >= 10.9.2
 @sun-protocol/sun-studio >= 0.2.2
 ```
+
+---
 
 ## Compile, Test and Deploy
 
@@ -167,3 +172,14 @@ After deployment, you can check deployed contract info at:
 ```text
 deployments/<network>/<contractName>.json
 ```
+
+---
+
+## Community & Support
+
+If you have questions about this project, find bugs, or would like to contribute, you can reach the team and community via:
+
+- [Telegram](https://t.me/SunIO_Defi)
+- [Twitter](https://twitter.com/defi_sunio)
+
+Please follow official announcements from these channels for the latest information on deployments, upgrades, and security notices.
